@@ -1,0 +1,182 @@
+@import "tailwindcss";
+
+:root {
+  --site-bg: #ffffff;
+  --site-surface: #f8fafc;
+  --site-text: #272711;
+  --site-accent: #272711;
+  --site-accent-text: #ffffff;
+  --site-muted: #64748b;
+  --site-header: #272711;
+  --site-header-text: #ffffff;
+  --site-header-icon: #f8fafc;
+  --site-footer: #272711;
+  --site-footer-text: #ffffff;
+  --site-footer-icon: #f8fafc;
+  --site-button-bg: #272711;
+  --site-button-text: #ffffff;
+  --site-border: #d3d8dd;
+  color-scheme: light;
+  font-family: "Suisse Int'l", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: var(--site-bg);
+  color: var(--site-text);
+  font-family: "Suisse Int'l", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.dropdown-shell {
+  border: 1px solid #e1e4e8;
+  border-radius: 20px;
+  background: #f4f5f6;
+  color: #111827;
+  box-shadow: 0 18px 45px rgba(15, 23, 42, 0.14);
+  pointer-events: auto;
+}
+
+.dropdown-full-width {
+  position: fixed;
+  top: 80px;
+  left: 0;
+  right: 0;
+  width: auto;
+  max-width: none;
+  margin: 0;
+  box-sizing: border-box;
+  height: 360px;
+  transform: none;
+  overflow: auto;
+  border-radius: 0 0 24px 24px;
+}
+
+.dropdown-full-width > .dropdown-shell {
+  height: 100%;
+  width: 100%;
+  max-width: none;
+  border-radius: 0 0 24px 24px;
+  box-shadow: none;
+}
+
+.dropdown-group {
+  border-color: #e1e4e8;
+}
+
+.dropdown-label {
+  color: #6b7280;
+  letter-spacing: 0.08em;
+}
+
+.dropdown-link {
+  color: #111827;
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+.dropdown-link:hover {
+  background: #ffffff;
+  color: #111827;
+  box-shadow: inset 3px 0 0 #facc15;
+}
+
+.dropdown-feature {
+  background: #e7e9ec;
+  color: #111827;
+}
+
+.dropdown-feature-button {
+  background: #ffffff;
+  color: #111827;
+}
+
+.dropdown-feature-button:hover {
+  background: #facc15;
+  color: #111827;
+}
+
+.dropdown-card {
+  border: 0;
+  background: #ffffff;
+  color: #111827;
+}
+
+.dropdown-card:hover {
+  background: #ffffff;
+}
+
+.dropdown-carousel-button {
+  display: inline-flex;
+  width: 28px;
+  height: 28px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #d9dde2;
+  border-radius: 9999px;
+  background: #ffffff;
+  color: #111827;
+  transition: background-color 150ms ease, border-color 150ms ease;
+}
+
+.dropdown-carousel-button:hover:not(:disabled) {
+  border-color: #facc15;
+  background: #facc15;
+}
+
+.dropdown-carousel-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.35;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+}
+
+a,
+button,
+input[type="button"],
+input[type="submit"],
+input[type="reset"],
+[role="button"] {
+  cursor: pointer;
+}
+
+/* CMS content responsiveness */
+.page-card img, .page-card video, .page-card iframe {
+  max-width: 100%;
+  height: auto;
+}
+.page-card table {
+  width: 100%;
+  border-collapse: collapse;
+}
+.page-card iframe, .page-card embed {
+  max-width: 100%;
+}
+.page-card .cms-content {
+  width: 100%;
+}

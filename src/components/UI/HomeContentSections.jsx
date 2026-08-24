@@ -1,0 +1,254 @@
+import { useState } from 'react'
+import { FaArrowRight, FaCalendarAlt, FaCarSide, FaMapMarkerAlt, FaPhoneAlt, FaUser, FaUsers, FaCheckCircle } from 'react-icons/fa'
+import journeyImage from '../../assets/iamges/Home page image/HeroImage1.png'
+import safetyImage from '../../assets/iamges/Home page image/Safety is non-negotiable..png'
+
+export function ReadingIntro() {
+  const [isExpanded, setIsExpanded] = useState(false)
+
+  return (
+    <section className="bg-white px-4 py-12 sm:px-6 sm:py-20 lg:px-8">
+      <div className="mx-auto grid max-w-[1440px] overflow-visible rounded-[28px] bg-yellow-400 lg:grid-cols-[.95fr_1.05fr]">
+        <div className="relative min-h-[360px] overflow-visible sm:min-h-[500px]">
+          <img src={safetyImage} alt="Passenger booking a safe journey with Abbey Cars" className="absolute -top-16 left-1/2 h-[calc(100%+4rem)] w-auto max-w-none -translate-x-1/2 object-cover object-center sm:-top-20 sm:h-[calc(100%+5rem)]" />
+        </div>
+        <div className="flex flex-col justify-center px-6 py-10 sm:px-12 sm:py-14 lg:px-16">
+          <p className="text-sm font-bold uppercase tracking-[0.22em] text-slate-950/70">A local service you can rely on</p>
+          <h2 className="mt-4 max-w-xl text-3xl font-bold leading-tight text-slate-950 sm:text-4xl">Your Reading Local Taxi Service, Built on Trust</h2>
+          <div className="mt-5 max-w-2xl text-sm leading-6 text-slate-950/75 sm:text-base">
+            <p>We&apos;ve been proudly serving Reading and the surrounding areas for years. We&apos;re not a faceless national chain — we&apos;re a company that knows the area, the roads and the communities we serve.</p>
+            <div className={`grid overflow-hidden transition-[grid-template-rows,opacity] duration-500 ease-in-out ${isExpanded ? 'mt-3 grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'}`} aria-hidden={!isExpanded}>
+              <div className="min-h-0 space-y-3">
+                <p>We&apos;ve built our reputation the simple way: by turning up when we say we will, treating every passenger with respect, and making sure every journey is safe, comfortable and hassle-free.</p>
+                <p>Whether you need a quick trip across town, a dependable airport transfer or a safe way home after a night out, Abbey Cars is here for you — day or night, rain or shine.</p>
+              </div>
+            </div>
+          </div>
+          <button type="button" aria-expanded={isExpanded} onClick={() => setIsExpanded((expanded) => !expanded)} className="mt-6 inline-flex w-fit items-center rounded-xl bg-slate-950 px-5 py-2.5 text-sm font-bold !text-white transition hover:bg-slate-800">
+            {isExpanded ? 'Read less' : 'Read more'}
+          </button>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+const bookingSteps = [
+  { icon: FaUser, title: 'Start with the essentials', text: 'Tell us who is travelling and how we can reach you. Your details help us keep every booking clear, personal and easy to confirm.' },
+  { icon: FaMapMarkerAlt, title: 'Set your route', text: 'Add your pickup point and destination, from a Reading address to an airport or a longer journey across Berkshire. We use these details to plan the right trip.' },
+  { icon: FaCalendarAlt, title: 'Choose a time that works for you', text: 'Select your travel date and pickup time. Booking ahead gives us the best chance to have your driver ready exactly when you need to leave.' },
+  { icon: FaUsers, title: 'Tell us about your passengers', text: 'Add the number of passengers and the luggage you are bringing. This makes it simple for us to match your journey with comfortable space.' },
+  { icon: FaCarSide, title: 'Choose the right vehicle', text: 'Review the available vehicles and select the one that suits your group, luggage and journey. Every option is chosen with comfort in mind.' },
+  { icon: FaCheckCircle, title: 'Review and send your request', text: 'Check the details once, then submit your booking request. We will review it and contact you to confirm the journey with Abbey Cars.' },
+]
+
+export function HowToBook() {
+  return (
+    <section className="bg-slate-50 py-16 sm:py-24">
+      <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
+
+        <div className="mx-auto mb-12 max-w-3xl text-center">
+          <p className="text-sm font-semibold uppercase tracking-[0.22em] text-yellow-600">
+            Simple from start to finish
+          </p>
+
+          <h2 className="mt-3 text-3xl font-bold text-slate-900 sm:text-4xl">
+            How to Book with Abbey Cars
+          </h2>
+
+          <p className="mt-4 text-lg leading-7 text-slate-600">
+            Booking your taxi in Reading is quick and straightforward. Simply
+            provide your journey details through our online booking form, and
+            we&apos;ll take care of the rest.
+          </p>
+        </div>
+
+        {/* CARD STACK */}
+        <div className="relative">
+
+          {bookingSteps.map(({ icon: Icon, title, text }, index) => {
+
+            const imageOnRight = index % 2 === 0
+            const image = index % 2 === 1 ? journeyImage : safetyImage
+
+            const cardTone = index % 3
+            const isDark = cardTone === 2
+
+            return (
+              <div
+                key={title}
+                className="relative"
+                style={{
+                  height: 'calc(100vh + 1800px)',
+                  marginBottom: index < bookingSteps.length - 1 ? '-1840px' : 0,
+                }}
+              >
+
+                <article
+                  className={`
+                    sticky
+                    overflow-hidden
+                    rounded-[28px]
+                    border
+                    p-6
+                    shadow-[0_24px_70px_rgba(15,23,42,0.18)]
+                    lg:p-8
+
+                    ${
+                      cardTone === 0
+                        ? 'border-yellow-400 bg-yellow-400'
+                        : cardTone === 1
+                          ? 'border-slate-200 bg-white'
+                          : 'border-black bg-black'
+                    }
+                  `}
+                  style={{
+                    top: `${index * 22}px`,
+                    zIndex: index + 1,
+                  }}
+                >
+
+                  <div
+                    className={`
+                      flex
+                      min-h-[500px]
+                      flex-col
+                      gap-8
+
+                      lg:min-h-[calc(100vh-40px)]
+                      lg:flex-row
+                      lg:items-stretch
+                      lg:gap-0
+
+                      ${imageOnRight ? '' : 'lg:flex-row-reverse'}
+                    `}
+                  >
+
+                    {/* IMAGE */}
+                    <div className="relative min-h-[240px] overflow-hidden rounded-2xl lg:w-[48%]">
+                      <img
+                        src={image}
+                        alt="Abbey Cars journey"
+                        className="absolute inset-0 h-full w-full object-cover"
+                      />
+                    </div>
+
+                    {/* CONTENT */}
+                    <div className="relative flex flex-1 flex-col justify-center lg:w-[52%] lg:px-16">
+
+                      <span
+                        className={`
+                          absolute
+                          left-0
+                          top-0
+                          text-sm
+                          font-bold
+                          ${
+                            cardTone === 0
+                              ? 'text-slate-950/50'
+                              : 'text-yellow-500'
+                          }
+                        `}
+                      >
+                        0{index + 1}
+                      </span>
+
+                      <Icon
+                        className={`
+                          text-2xl
+                          ${
+                            cardTone === 0
+                              ? 'text-slate-950'
+                              : 'text-yellow-500'
+                          }
+                        `}
+                      />
+
+                      <h3
+                        className={`
+                          mt-5
+                          max-w-lg
+                          text-3xl
+                          font-bold
+                          leading-[1.05]
+                          sm:text-4xl
+                          ${
+                            isDark
+                              ? 'text-white'
+                              : 'text-slate-950'
+                          }
+                        `}
+                      >
+                        {title}
+                      </h3>
+
+                      <p
+                        className={`
+                          mt-5
+                          max-w-lg
+                          text-base
+                          leading-7
+                          sm:text-lg
+                          ${
+                            cardTone === 0
+                              ? 'text-slate-950/75'
+                              : isDark
+                                ? 'text-slate-300'
+                                : 'text-slate-600'
+                          }
+                        `}
+                      >
+                        {text}
+                      </p>
+
+                      <span
+                        className={`
+                          mt-8
+                          inline-flex
+                          w-fit
+                          items-center
+                          gap-2
+                          text-xs
+                          font-bold
+                          uppercase
+                          tracking-[0.18em]
+                          ${
+                            isDark
+                              ? 'text-yellow-400'
+                              : 'text-slate-950'
+                          }
+                        `}
+                      >
+                        Abbey Cars
+                        <FaArrowRight />
+                      </span>
+
+                    </div>
+                  </div>
+                </article>
+
+              </div>
+            )
+          })}
+
+        </div>
+      </div>
+    </section>
+  )
+}
+
+export function HomeFinalCTA() {
+  return (
+    <section className="bg-slate-950 py-16 text-white sm:py-24">
+      <div className="mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
+        <h2 className="text-3xl font-bold sm:text-5xl">Ready to travel?</h2>
+        <p className="mt-5 text-lg leading-8 text-slate-300">Book your taxi online and let Abbey Cars take care of your journey from start to finish.</p>
+        <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
+          <a href="/test/booking" className="inline-flex items-center justify-center gap-2 rounded-full bg-yellow-400 px-7 py-3 font-semibold text-slate-950 transition hover:bg-yellow-300">Book Online</a>
+          <a href="tel:+441189798484" className="inline-flex items-center justify-center gap-2 rounded-full border border-yellow-400 px-7 py-3 font-semibold text-yellow-400 transition hover:bg-yellow-400/10"><FaPhoneAlt /> Call Us Now</a>
+          <a href="https://wa.me/441189798484" className="inline-flex items-center justify-center gap-2 rounded-full border border-white/30 px-7 py-3 font-semibold text-white transition hover:border-white">WhatsApp Us</a>
+        </div>
+      </div>
+    </section>
+  )
+}
