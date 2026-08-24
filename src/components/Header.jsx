@@ -219,7 +219,7 @@ function Header() {
         <div className="flex-shrink-0">
           <NavLink to="/" className="flex items-center gap-3">
           <div className="flex items-center justify-center rounded-2xl bg-[#fde507] shadow-sm">
-            <img src={logoImage} alt="Abbey Cars logo" className="h-12 w-auto rounded-full object-contain" />
+            <img src={typeof logoImage === 'string' ? logoImage : logoImage.src} alt="Abbey Cars logo" className="h-12 w-auto rounded-full object-contain" />
             </div>
             <div className="hidden sm:block">
               <span className="inline-flex items-center rounded-xl text-[1.5rem] font-black leading-none tracking-[-0.04em] ">Abbey<span className="text-[#fde507]">Cars</span> </span>

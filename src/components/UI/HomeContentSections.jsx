@@ -2,6 +2,12 @@ import { useState } from 'react'
 import { FaArrowRight, FaCalendarAlt, FaCarSide, FaMapMarkerAlt, FaPhoneAlt, FaUser, FaUsers, FaCheckCircle } from 'react-icons/fa'
 import journeyImage from '../../assets/iamges/Home page image/HeroImage1.png'
 import safetyImage from '../../assets/iamges/Home page image/Safety is non-negotiable..png'
+import essentialsImage from '../../assets/iamges/Start with the essentials.png'
+import routeImage from '../../assets/iamges/Set your route.png'
+import timeImage from '../../assets/iamges/Choose a time that works for you.png'
+import passengersImage from '../../assets/iamges/Tell us about your passengers.png'
+import vehicleImage from '../../assets/iamges/Choose the right vehicle.png'
+import reviewImage from '../../assets/iamges/Review and send your request.png'
 
 export function ReadingIntro() {
   const [isExpanded, setIsExpanded] = useState(false)
@@ -9,8 +15,25 @@ export function ReadingIntro() {
   return (
     <section className="bg-white px-4 py-12 sm:px-6 sm:py-20 lg:px-8">
       <div className="mx-auto grid max-w-[1440px] overflow-visible rounded-[28px] bg-yellow-400 lg:grid-cols-[.95fr_1.05fr]">
-        <div className="relative min-h-[360px] overflow-visible sm:min-h-[500px]">
-          <img src={safetyImage} alt="Passenger booking a safe journey with Abbey Cars" className="absolute -top-16 left-1/2 h-[calc(100%+4rem)] w-auto max-w-none -translate-x-1/2 object-cover object-center sm:-top-20 sm:h-[calc(100%+5rem)]" />
+        <div className="relative min-h-[360px] overflow-hidden sm:min-h-[500px]">
+          <svg
+            className="pointer-events-none absolute left-1/2 top-1/2 z-0 h-auto w-[150%] max-w-none -translate-x-1/2 -translate-y-1/2"
+            width="1200"
+            height="343"
+            viewBox="0 0 350 100"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+          >
+            <path
+              d="M150 75 C125 40 105 25 75 25 C45 25 25 45 25 75 C25 105 45 125 75 125 C105 125 125 110 150 75 C175 40 195 25 225 25 C255 25 275 45 275 75 C275 105 255 125 225 125 C195 125 175 110 150 75Z"
+              fill="none"
+              stroke="#fffcfb"
+              strokeWidth="25"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+          <img src={typeof safetyImage === 'string' ? safetyImage : safetyImage.src} alt="Passenger booking a safe journey with Abbey Cars" className="absolute -top-16 left-1/2 z-10 h-[calc(100%+4rem)] w-auto max-w-none -translate-x-1/2 object-cover object-center sm:-top-20 sm:h-[calc(100%+5rem)]" />
         </div>
         <div className="flex flex-col justify-center px-6 py-10 sm:px-12 sm:py-14 lg:px-16">
           <p className="text-sm font-bold uppercase tracking-[0.22em] text-slate-950/70">A local service you can rely on</p>
@@ -34,12 +57,12 @@ export function ReadingIntro() {
 }
 
 const bookingSteps = [
-  { icon: FaUser, title: 'Start with the essentials', text: 'Tell us who is travelling and how we can reach you. Your details help us keep every booking clear, personal and easy to confirm.' },
-  { icon: FaMapMarkerAlt, title: 'Set your route', text: 'Add your pickup point and destination, from a Reading address to an airport or a longer journey across Berkshire. We use these details to plan the right trip.' },
-  { icon: FaCalendarAlt, title: 'Choose a time that works for you', text: 'Select your travel date and pickup time. Booking ahead gives us the best chance to have your driver ready exactly when you need to leave.' },
-  { icon: FaUsers, title: 'Tell us about your passengers', text: 'Add the number of passengers and the luggage you are bringing. This makes it simple for us to match your journey with comfortable space.' },
-  { icon: FaCarSide, title: 'Choose the right vehicle', text: 'Review the available vehicles and select the one that suits your group, luggage and journey. Every option is chosen with comfort in mind.' },
-  { icon: FaCheckCircle, title: 'Review and send your request', text: 'Check the details once, then submit your booking request. We will review it and contact you to confirm the journey with Abbey Cars.' },
+  { icon: FaUser, image: essentialsImage, title: 'Start with the essentials', text: 'Tell us who is travelling and how we can reach you. Your details help us keep every booking clear, personal and easy to confirm.' },
+  { icon: FaMapMarkerAlt, image: routeImage, title: 'Set your route', text: 'Add your pickup point and destination, from a Reading address to an airport or a longer journey across Berkshire. We use these details to plan the right trip.' },
+  { icon: FaCalendarAlt, image: timeImage, title: 'Choose a time that works for you', text: 'Select your travel date and pickup time. Booking ahead gives us the best chance to have your driver ready exactly when you need to leave.' },
+  { icon: FaUsers, image: passengersImage, title: 'Tell us about your passengers', text: 'Add the number of passengers and the luggage you are bringing. This makes it simple for us to match your journey with comfortable space.' },
+  { icon: FaCarSide, image: vehicleImage, title: 'Choose the right vehicle', text: 'Review the available vehicles and select the one that suits your group, luggage and journey. Every option is chosen with comfort in mind.' },
+  { icon: FaCheckCircle, image: reviewImage, title: 'Review and send your request', text: 'Check the details once, then submit your booking request. We will review it and contact you to confirm the journey with Abbey Cars.' },
 ]
 
 export function HowToBook() {
@@ -66,11 +89,9 @@ export function HowToBook() {
         {/* CARD STACK */}
         <div className="relative">
 
-          {bookingSteps.map(({ icon: Icon, title, text }, index) => {
+          {bookingSteps.map(({ icon: Icon, image, title, text }, index) => {
 
             const imageOnRight = index % 2 === 0
-            const image = index % 2 === 1 ? journeyImage : safetyImage
-
             const cardTone = index % 3
             const isDark = cardTone === 2
 
@@ -111,11 +132,11 @@ export function HowToBook() {
                   <div
                     className={`
                       flex
-                      min-h-[500px]
+                      min-h-[420px]
                       flex-col
                       gap-8
 
-                      lg:min-h-[calc(100vh-40px)]
+                      lg:min-h-[460px]
                       lg:flex-row
                       lg:items-stretch
                       lg:gap-0
@@ -127,14 +148,14 @@ export function HowToBook() {
                     {/* IMAGE */}
                     <div className="relative min-h-[240px] overflow-hidden rounded-2xl lg:w-[48%]">
                       <img
-                        src={image}
+                        src={typeof image === 'string' ? image : image.src}
                         alt="Abbey Cars journey"
-                        className="absolute inset-0 h-full w-full object-cover"
+                        className="absolute inset-0 h-full w-full object-contain"
                       />
                     </div>
 
                     {/* CONTENT */}
-                    <div className="relative flex flex-1 flex-col justify-center lg:w-[52%] lg:px-16">
+                    <div className="relative flex flex-1 flex-col justify-center pt-8 lg:w-[52%] lg:px-16 lg:pt-12">
 
                       <span
                         className={`

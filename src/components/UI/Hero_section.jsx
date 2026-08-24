@@ -6,7 +6,7 @@ function Hero_section() {
     <section className="relative min-h-screen overflow-hidden">
       <img
   className="absolute inset-0 h-full w-full object-cover"
-  src={heroImage}
+  src={typeof heroImage === 'string' ? heroImage : heroImage.src}
   alt="Hero Background"
   aria-hidden="true"
   style={{
