@@ -162,21 +162,75 @@ Only add facts that are real and visible on the website. Suitable schema types i
 
 Do not add fake reviews, ratings, prices, addresses, or opening hours.
 
-## 7. Images
+## 7. Image SEO
 
-Images imported from `src/assets` must work in both Vite and Next.js. Existing legacy `<img>` elements use this compatible pattern:
+Edit image SEO where the image is rendered, not in `app/layout.jsx`.
+
+Current image locations:
+
+- Logo: `src/components/Header.jsx`
+- Hero image: `src/components/UI/Hero_section.jsx`
+- Intro image and SVG: `src/components/UI/HomeContentSections.jsx`
+- Booking card images: `src/components/UI/HomeContentSections.jsx`
+- Service images: `src/components/UI/services/ServiceGrid.jsx`
+- Fleet images: loaded from the PHP API and `uploads/fleet-images/`
+
+### Alt Text
+
+Give meaningful images a short, accurate description. Include the business or service only when it helps describe the image:
+
+```jsx
+<img
+  src={imageUrl}
+  alt="Abbey Cars vehicle ready for an airport transfer"
+  className="h-full w-full object-contain"
+/>
+```
+
+For booking cards, use the card title in the description:
+
+```jsx
+alt={`${title} booking step for Abbey Cars`}
+```
+
+Use an empty alt attribute for decorative images so screen readers ignore them:
+
+```jsx
+<img src={decorativeImage} alt="" aria-hidden="true" />
+```
+
+Do not add keyword lists, false descriptions, or the same alt text to unrelated images. If an image is also a link, the surrounding link text should explain its destination.
+
+### Next.js Imported Images
+
+The existing legacy components use normal `<img>` elements. Vite provides an imported image as a string, while Next.js provides an object with a `.src` property. Keep this compatibility pattern when editing those components:
 
 ```jsx
 src={typeof image === 'string' ? image : image.src}
 ```
 
-Use descriptive alt text:
+For new Next-only components, `next/image` is preferred:
 
 ```jsx
-<img src={imageUrl} alt="Abbey Cars vehicle ready for an airport transfer" />
+import Image from 'next/image'
+
+<Image
+  src={image}
+  alt="Abbey Cars taxi in Reading"
+  width={1200}
+  height={800}
+  sizes="(max-width: 1024px) 100vw, 50vw"
+  priority
+/>
 ```
 
-Use `object-contain` when the entire image must be visible. Use `object-cover` only when cropping is intentional.
+Use `priority` only for the main above-the-fold/LCP image. Let below-the-fold images lazy-load. Use `fill` only when the parent has `position: relative` and a stable height or aspect ratio.
+
+Use `object-contain` when the entire image must be visible. Use `object-cover` only when cropping is intentional. Keep image dimensions or aspect ratios stable to reduce layout shift.
+
+### Image Filename and Format
+
+Use descriptive filenames such as `heathrow-airport-transfer.jpg`, not names such as `IMG_001.jpg`. Prefer compressed WebP or AVIF for new images when quality is acceptable. Keep existing filenames when changing them would break references.
 
 ## 8. PHP API and Security
 
@@ -209,7 +263,9 @@ After changing SEO data:
 7. Check `/sitemap.xml`.
 8. Check `/robots.txt`.
 9. Confirm the page has one correct H1.
-10. Confirm images load and have useful alt text.
+10. Confirm every meaningful image loads with useful alt text.
+11. Confirm decorative images use `alt=""` and do not create duplicate screen-reader content.
+12. Check that the main image is not unnecessarily lazy-loaded and that lower images do not cause layout shift.
 
 Useful production URLs:
 

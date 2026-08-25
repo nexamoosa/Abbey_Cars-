@@ -205,7 +205,7 @@ function Admin() {
   const [editorPage, setEditorPage] = useState(null)
   const navigate = useNavigate()
   const location = useLocation()
-  const apiBase = import.meta.env.DEV ? 'http://localhost/Abbey_Cars/api' : 'api'
+  const apiBase = '/api'
 
   const notifySiteChange = (title, message) => {
     createNotification({ type: 'site-change', title, message, reference_type: 'site-change' }).catch(() => {})
@@ -646,7 +646,7 @@ function Admin() {
         <div className="mt-4 space-y-2">
           {links.map((l, i) => (
             <div key={i} className="flex items-center justify-between">
-              <div>{l.label} — <a href={l.url} className="text-blue-600">{l.url}</a></div>
+              <div>{l.label} — <a href={l.url} className="text-yellow-600">{l.url}</a></div>
               <div>
                 <button onClick={() => remove(i)} className="rounded-xl bg-red-500 px-3 py-1 text-white">Delete</button>
               </div>
@@ -1045,7 +1045,7 @@ function Admin() {
               <h3 className="text-xl font-bold">Web3Forms Access Keys</h3>
               <p className="text-sm text-zinc-500">Forms are powered by Web3Forms (https://web3forms.com/). To change where form emails are sent, create or log in at Web3Forms and paste access keys here.</p>
             </div>
-            <a href="https://web3forms.com/" target="_blank" rel="noreferrer" className="text-sm font-semibold text-blue-600">Open Web3Forms</a>
+            <a href="https://web3forms.com/" target="_blank" rel="noreferrer" className="text-sm font-semibold text-yellow-600">Open Web3Forms</a>
           </div>
 
           <div className="mt-6 grid gap-4 sm:grid-cols-2">
@@ -2187,6 +2187,7 @@ function Admin() {
     const [metaDesc, setMetaDesc] = useState(editorPage?.meta?.description || '')
     const [slug, setSlug] = useState(editorPage?.slug || editorPage?.to?.split('/').pop() || '')
     const [excerpt, setExcerpt] = useState(editorPage?.excerpt || '')
+    const [publishedAt, setPublishedAt] = useState(editorPage?.publishedAt || editorPage?.published_at || new Date().toISOString().slice(0, 10))
     const [status, setStatus] = useState(editorPage?.status || 'published')
     const [featuredImage, setFeaturedImage] = useState(editorPage?.featured_image || '')
     const [editorHtml, setEditorHtml] = useState(editorPage?.content || '')
@@ -2204,17 +2205,26 @@ function Admin() {
     const [mediaPickerOpenPage, setMediaPickerOpenPage] = useState(false)
     const [mediaPickerImagesPage, setMediaPickerImagesPage] = useState([])
     const [mediaPickerMode, setMediaPickerMode] = useState('insert')
+    const [floatingToolbar, setFloatingToolbar] = useState(null)
+    const [imageDialogOpen, setImageDialogOpen] = useState(false)
+    const [imageUrl, setImageUrl] = useState('')
+    const [imageWidth, setImageWidth] = useState('100%')
+    const [imageBorder, setImageBorder] = useState('none')
     const [breadcrumbs, setBreadcrumbs] = useState(editorPage?.meta?.breadcrumbs || '')
     const [aboutText, setAboutText] = useState(editorPage?.meta?.about || editorPage?.content || '')
     const [servicesList, setServicesList] = useState(Array.isArray(editorPage?.meta?.services) && editorPage.meta.services.length ? editorPage.meta.services : [''])
     const [gallery, setGallery] = useState(editorPage?.meta?.gallery || [])
     const [layout, setLayout] = useState(editorPage?.meta?.layout || 'default')
+    const featuredFileInputRef = useRef(null)
+    const contentFileInputRef = useRef(null)
+    const editorSelectionRef = useRef(null)
 
     useEffect(() => {
       setMetaTitle(editorPage?.title || '')
       setMetaDesc(editorPage?.meta?.description || '')
       setSlug(editorPage?.slug || editorPage?.to?.split('/').pop() || '')
       setExcerpt(editorPage?.excerpt || '')
+      setPublishedAt(editorPage?.publishedAt || editorPage?.published_at || new Date().toISOString().slice(0, 10))
       setStatus(editorPage?.status || 'published')
       setFeaturedImage(editorPage?.featured_image || '')
       setEditorHtml(editorPage?.content || '')
@@ -2235,6 +2245,40 @@ function Admin() {
       setLinkTarget('_blank')
       setLinkNofollow(false)
       setMediaPickerMode('insert')
+      setFloatingToolbar(null)
+      setImageDialogOpen(false)
+      setImageUrl('')
+      setImageWidth('100%')
+      setImageBorder('none')
+    }, [editorPage])
+
+    useEffect(() => {
+      const updateFloatingToolbar = () => {
+        const selection = window.getSelection()
+        const editor = document.getElementById('cms-editor')
+        if (!selection?.rangeCount || !editor || selection.isCollapsed || !selection.toString().trim()) {
+          setFloatingToolbar(null)
+          return
+        }
+
+        const range = selection.getRangeAt(0)
+        if (!editor.contains(range.commonAncestorContainer)) {
+          setFloatingToolbar(null)
+          return
+        }
+
+        const rect = range.getBoundingClientRect()
+        const toolbarHeight = 48
+        const toolbarTop = rect.top >= toolbarHeight + 8 ? rect.top - toolbarHeight - 4 : rect.bottom + 8
+        setFloatingToolbar({
+          top: Math.min(Math.max(8, toolbarTop), window.innerHeight - toolbarHeight - 8),
+          left: Math.min(Math.max(8, rect.left), window.innerWidth - 300),
+        })
+        editorSelectionRef.current = range.cloneRange()
+      }
+
+      document.addEventListener('selectionchange', updateFloatingToolbar)
+      return () => document.removeEventListener('selectionchange', updateFloatingToolbar)
     }, [editorPage])
 
     const openMediaPickerPage = async (mode = 'insert') => {
@@ -2254,6 +2298,22 @@ function Admin() {
     const isCreateMode = location.pathname.includes('/create')
     const sectionLabel = editorType === 'privacy' ? 'Privacy page' : editorType === 'terms' ? 'Terms page' : editorType === 'areas-we-cover' ? 'Service area' : 'Blog post'
 
+    const saveEditorSelection = () => {
+      const selection = window.getSelection()
+      if (selection?.rangeCount) editorSelectionRef.current = selection.getRangeAt(0).cloneRange()
+    }
+
+    const restoreEditorSelection = () => {
+      const editor = document.getElementById('cms-editor')
+      const range = editorSelectionRef.current
+      if (!editor || !range) return false
+      editor.focus()
+      const selection = window.getSelection()
+      selection.removeAllRanges()
+      selection.addRange(range)
+      return true
+    }
+
     const addServiceItem = () => setServicesList((current) => [...current, ''])
     const updateServiceItem = (index, value) => setServicesList((current) => current.map((item, itemIndex) => itemIndex === index ? value : item))
     const removeServiceItem = (index) => setServicesList((current) => current.filter((_, itemIndex) => itemIndex !== index))
@@ -2266,6 +2326,76 @@ function Admin() {
       reader.readAsDataURL(file)
       event.target.value = ''
     }
+
+    const handleContentImageUpload = (event) => {
+      const file = event.target.files?.[0]
+      if (!file) return
+      const reader = new FileReader()
+      reader.onload = () => {
+        restoreEditorSelection()
+        document.execCommand('insertImage', false, String(reader.result))
+        setEditorHtml(document.getElementById('cms-editor')?.innerHTML || editorHtml)
+      }
+      reader.readAsDataURL(file)
+      event.target.value = ''
+    }
+
+    const openContentImagePicker = () => {
+      saveEditorSelection()
+      contentFileInputRef.current?.click()
+    }
+
+    const openImageDialog = () => {
+      saveEditorSelection()
+      setImageDialogOpen(true)
+    }
+
+    const insertConfiguredImage = () => {
+      if (!imageUrl.trim()) return
+      restoreEditorSelection()
+      const image = `<img src="${imageUrl.trim()}" alt="" style="display:block;width:${imageWidth};height:auto;border:${imageBorder};" />`
+      document.execCommand('insertHTML', false, image)
+      setEditorHtml(document.getElementById('cms-editor')?.innerHTML || editorHtml)
+      setImageDialogOpen(false)
+      setImageUrl('')
+    }
+
+    const renderImageDialog = () => imageDialogOpen ? (
+      <div className="fixed inset-0 z-[10000] flex items-center justify-center p-6">
+        <div className="absolute inset-0 bg-black/40" onClick={() => setImageDialogOpen(false)} />
+        <div className="relative z-10 w-full max-w-lg rounded-3xl bg-white p-6 shadow-xl">
+          <h4 className="text-lg font-semibold text-zinc-900">Add image</h4>
+          <div className="mt-4 space-y-3">
+            <label className="block text-sm font-medium text-zinc-700">
+              Image URL
+              <input value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} placeholder="https://example.com/image.jpg" className="mt-2 w-full rounded-2xl border border-zinc-300 bg-white px-4 py-3 outline-none" />
+            </label>
+            <label className="block text-sm font-medium text-zinc-700">
+              Image size
+              <select value={imageWidth} onChange={(e) => setImageWidth(e.target.value)} className="mt-2 w-full rounded-2xl border border-zinc-300 bg-white px-4 py-3 outline-none">
+                <option value="25%">Small (25%)</option>
+                <option value="50%">Medium (50%)</option>
+                <option value="75%">Large (75%)</option>
+                <option value="100%">Full width</option>
+              </select>
+            </label>
+            <label className="block text-sm font-medium text-zinc-700">
+              Image border
+              <select value={imageBorder} onChange={(e) => setImageBorder(e.target.value)} className="mt-2 w-full rounded-2xl border border-zinc-300 bg-white px-4 py-3 outline-none">
+                <option value="none">No border</option>
+                <option value="1px solid #d4d4d8">Thin border</option>
+                <option value="2px solid #18181b">Strong border</option>
+                <option value="1px solid #d4af37;border-radius:12px">Border with rounded corners</option>
+              </select>
+            </label>
+          </div>
+          <div className="mt-6 flex justify-end gap-2">
+            <button type="button" onClick={() => setImageDialogOpen(false)} className="rounded-2xl border border-zinc-200 bg-white px-4 py-3 text-sm text-zinc-700">Cancel</button>
+            <button type="button" onClick={insertConfiguredImage} className="rounded-2xl bg-yellow-400 px-4 py-3 text-sm font-semibold text-black">Insert image</button>
+          </div>
+        </div>
+      </div>
+    ) : null
 
     const handleGalleryUpload = async (event) => {
       const files = Array.from(event.target.files || [])
@@ -2292,12 +2422,14 @@ function Admin() {
     }
 
     const saveContent = () => {
-      const content = sanitizeHtml(editorHtml)
+      const currentEditorHtml = document.getElementById('cms-editor')?.innerHTML || editorHtml
+      const content = sanitizeHtml(currentEditorHtml)
       const autoSlug = slug || metaTitle.toLowerCase().replace(/\s+/g, '-').replace(/[^\w-]/g, '') || `area-${Date.now()}`
       const data = {
         title: metaTitle,
         slug: autoSlug,
         excerpt,
+        publishedAt,
         status,
         featured_image: featuredImage,
         meta: { description: metaDesc },
@@ -2321,8 +2453,9 @@ function Admin() {
 
       if (editorType === 'areas-we-cover') {
         const services = servicesList.map((service) => service.trim()).filter(Boolean)
-        const areaMeta = { ...(data.meta || {}), breadcrumbs, services, gallery, about: aboutText, layout }
-        const areaContent = sanitizeHtml(aboutText || editorHtml)
+        const currentAreaHtml = document.getElementById('cms-editor')?.innerHTML || aboutText || editorHtml
+        const areaContent = sanitizeHtml(currentAreaHtml)
+        const areaMeta = { ...(data.meta || {}), breadcrumbs, services, gallery, about: areaContent, layout }
         if (isCreateMode) {
           addArea({ ...data, meta: areaMeta, content: areaContent, label: metaTitle, to: `/areas-we-cover/${autoSlug}` })
         } else {
@@ -2348,6 +2481,7 @@ function Admin() {
     }
 
     const applyCommand = (command, value = null) => {
+      restoreEditorSelection()
       document.execCommand(command, false, value)
       setEditorHtml(document.getElementById('cms-editor')?.innerHTML || editorHtml)
     }
@@ -2357,6 +2491,7 @@ function Admin() {
       if (!file) return
       const reader = new FileReader()
       reader.onload = () => {
+        restoreEditorSelection()
         document.execCommand('insertImage', false, reader.result)
         setEditorHtml(document.getElementById('cms-editor')?.innerHTML || editorHtml)
       }
@@ -2364,6 +2499,7 @@ function Admin() {
     }
 
     const openLinkDialog = () => {
+      saveEditorSelection()
       setLinkText(window.getSelection()?.toString() || '')
       setLinkUrl('')
       setLinkTarget('_blank')
@@ -2373,7 +2509,17 @@ function Admin() {
 
     const insertLink = () => {
       if (!linkUrl) return
-      document.execCommand('createLink', false, linkUrl)
+      const hasSelection = restoreEditorSelection()
+      if (hasSelection && window.getSelection()?.toString()) {
+        document.execCommand('createLink', false, linkUrl)
+      } else if (linkText.trim()) {
+        const anchor = document.createElement('a')
+        anchor.href = linkUrl
+        anchor.textContent = linkText.trim()
+        anchor.target = linkTarget
+        anchor.rel = linkNofollow ? 'nofollow' : ''
+        document.execCommand('insertHTML', false, anchor.outerHTML)
+      }
       const anchor = window.getSelection()?.anchorNode?.parentElement
       if (anchor?.tagName === 'A') {
         anchor.setAttribute('target', linkTarget)
@@ -2407,7 +2553,7 @@ function Admin() {
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500">Service area</p>
               <h3 className="mt-1 text-2xl font-bold text-zinc-900">{isCreateMode ? 'Create Area' : 'Edit Area'}</h3>
             </div>
-            <div className="flex flex-wrap items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2" onMouseDown={saveEditorSelection}>
               <button onClick={() => navigate('/admin/areas')} className="rounded-xl border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-700 transition hover:bg-zinc-50">Cancel</button>
               <button onClick={saveContent} className="rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-500">{isCreateMode ? 'Create Area' : 'Save Area'}</button>
             </div>
@@ -2449,13 +2595,26 @@ function Admin() {
                   <span className="flex items-center gap-2">
                     About this location <span className="text-rose-500">*</span>
                   </span>
-                  <textarea
-                    value={aboutText}
-                    onChange={(e) => setAboutText(e.target.value)}
-                    placeholder="Write a short description of the area, landmarks, and service coverage."
-                    className="mt-2 h-36 w-full rounded-xl border border-zinc-300 bg-white px-4 py-3 text-base text-zinc-900 outline-none transition focus:border-zinc-500"
-                  />
                 </label>
+                <div className="mt-3 flex flex-wrap items-center gap-2" onMouseDown={saveEditorSelection}>
+                  <button type="button" onClick={() => applyCommand('bold')} className="rounded-xl bg-white px-3 py-2 text-sm">Bold</button>
+                  <button type="button" onClick={() => applyCommand('italic')} className="rounded-xl bg-white px-3 py-2 text-sm">Italic</button>
+                  <button type="button" onClick={() => applyCommand('underline')} className="rounded-xl bg-white px-3 py-2 text-sm">Underline</button>
+                  <button type="button" onClick={() => applyCommand('formatBlock', '<H2>')} className="rounded-xl bg-white px-3 py-2 text-sm">H2</button>
+                  <button type="button" onClick={() => applyCommand('insertUnorderedList')} className="rounded-xl bg-white px-3 py-2 text-sm">Bullet</button>
+                  <button type="button" onClick={openLinkDialog} className="rounded-xl bg-white px-3 py-2 text-sm">Add link</button>
+                  <button type="button" onClick={openImageDialog} className="rounded-xl bg-white px-3 py-2 text-sm">Add image</button>
+                  <button type="button" onClick={openContentImagePicker} className="rounded-xl bg-white px-3 py-2 text-sm">Upload image</button>
+                </div>
+                <div
+                  id="cms-editor"
+                  contentEditable
+                  suppressContentEditableWarning
+                  onInput={(e) => { setAboutText(e.currentTarget.innerHTML); setEditorHtml(e.currentTarget.innerHTML) }}
+                  className="cms-content mt-3 min-h-[220px] w-full rounded-xl border border-zinc-300 bg-white px-4 py-3 text-base text-zinc-900 outline-none focus:border-zinc-500"
+                  dangerouslySetInnerHTML={{ __html: aboutText || '<p>Write a short description of the area, landmarks, and service coverage.</p>' }}
+                />
+                <input ref={contentFileInputRef} type="file" accept="image/*" onChange={handleContentImageUpload} className="hidden" />
               </section>
 
               <section className="rounded-2xl border border-zinc-200 bg-zinc-50 p-4 sm:p-5">
@@ -2565,6 +2724,26 @@ function Admin() {
             </aside>
           </div>
 
+          {floatingToolbar ? (
+            <div
+              className="fixed z-[10001] flex items-center gap-1 rounded-xl bg-zinc-900 p-1.5 text-white shadow-xl"
+              style={{ top: floatingToolbar.top, left: floatingToolbar.left }}
+              onMouseDown={(event) => {
+                event.preventDefault()
+                saveEditorSelection()
+              }}
+              role="toolbar"
+              aria-label="Text editing tools"
+            >
+              <button type="button" onClick={() => applyCommand('bold')} className="rounded-lg px-2.5 py-1.5 text-xs font-bold transition hover:bg-zinc-700">Bold</button>
+              <button type="button" onClick={() => applyCommand('italic')} className="rounded-lg px-2.5 py-1.5 text-xs italic transition hover:bg-zinc-700">Italic</button>
+              <button type="button" onClick={openLinkDialog} className="rounded-lg px-2.5 py-1.5 text-xs transition hover:bg-zinc-700">Add link</button>
+              <button type="button" onClick={openImageDialog} className="rounded-lg px-2.5 py-1.5 text-xs transition hover:bg-zinc-700">Add image</button>
+            </div>
+          ) : null}
+
+          {renderImageDialog()}
+
           {mediaPickerOpenPage ? (
             <div className="fixed inset-0 z-[10000] flex items-center justify-center overflow-y-auto bg-black/50 p-4">
               <div className="absolute inset-0" onClick={() => setMediaPickerOpenPage(false)} />
@@ -2612,9 +2791,11 @@ function Admin() {
             </div>
             <div className="flex flex-wrap items-center gap-2">
               <button type="button" onClick={() => setHtmlView((prev) => !prev)} className="rounded-xl border border-zinc-200 px-3 py-2 text-sm">{htmlView ? 'WYSIWYG' : 'HTML View'}</button>
-              <button type="button" onClick={openButtonDialog} className="rounded-xl bg-blue-600 px-3 py-2 text-sm font-semibold text-white">Insert Button</button>
-              <button type="button" onClick={() => openMediaPickerPage('insert')} className="rounded-xl bg-zinc-100 px-3 py-2 text-sm">Insert Image</button>
-              <button type="button" onClick={() => openMediaPickerPage('featured')} className="rounded-xl bg-zinc-100 px-3 py-2 text-sm">Featured Image</button>
+              <button type="button" onClick={openButtonDialog} className="rounded-xl bg-yellow-400 px-3 py-2 text-sm font-semibold text-black">Insert Button</button>
+              <button type="button" onClick={() => openMediaPickerPage('insert')} className="rounded-xl bg-zinc-100 px-3 py-2 text-sm">Insert from Media</button>
+              <button type="button" onClick={() => contentFileInputRef.current?.click()} className="rounded-xl bg-zinc-100 px-3 py-2 text-sm">Insert from PC</button>
+              <button type="button" onClick={openImageDialog} className="rounded-xl bg-zinc-100 px-3 py-2 text-sm">Insert from URL</button>
+              <input ref={contentFileInputRef} type="file" accept="image/*" onChange={handleContentImageUpload} className="hidden" />
               <button type="button" onClick={openLinkDialog} className="rounded-xl bg-zinc-100 px-3 py-2 text-sm">Insert Link</button>
             </div>
           </div>
@@ -2650,9 +2831,13 @@ function Admin() {
                 Meta Description
                 <textarea value={metaDesc} onChange={(e) => setMetaDesc(e.target.value)} className="mt-2 h-20 w-full rounded-2xl border border-zinc-300 bg-white px-4 py-3 outline-none focus:border-black" />
               </label>
+              <label className="mt-4 block text-sm font-medium text-zinc-700">
+                Publish date
+                <input type="date" value={publishedAt} onChange={(e) => setPublishedAt(e.target.value)} className="mt-2 w-full rounded-2xl border border-zinc-300 bg-white px-4 py-3 outline-none focus:border-black" />
+              </label>
 
               <div className="mt-4 rounded-3xl border border-zinc-200 bg-zinc-50 p-4">
-                <div className="flex flex-wrap items-center gap-2">
+                <div className="flex flex-wrap items-center gap-2" onMouseDown={saveEditorSelection}>
                   <button type="button" onClick={() => applyCommand('bold')} className="rounded-xl bg-white px-3 py-2 text-sm">Bold</button>
                   <button type="button" onClick={() => applyCommand('italic')} className="rounded-xl bg-white px-3 py-2 text-sm">Italic</button>
                   <button type="button" onClick={() => applyCommand('underline')} className="rounded-xl bg-white px-3 py-2 text-sm">Underline</button>
@@ -2692,13 +2877,12 @@ function Admin() {
                 ) : (
                   <div className="mt-3 rounded-3xl border border-dashed border-zinc-300 p-6 text-center text-sm text-zinc-500">No featured image set.</div>
                 )}
-                <input
-                  value={featuredImage}
-                  onChange={(e) => setFeaturedImage(e.target.value)}
-                  placeholder="Featured image URL"
-                  className="mt-3 w-full rounded-2xl border border-zinc-300 bg-white px-4 py-3 outline-none focus:border-black"
-                />
-                <button type="button" onClick={() => openMediaPickerPage('featured')} className="mt-3 w-full rounded-2xl bg-black px-4 py-3 text-sm font-semibold text-white">Choose from Media</button>
+                <div className="mt-3 grid gap-2 sm:grid-cols-3">
+                  <button type="button" onClick={() => openMediaPickerPage('featured')} className="rounded-2xl bg-black px-3 py-3 text-sm font-semibold text-white">Media Library</button>
+                  <button type="button" onClick={() => featuredFileInputRef.current?.click()} className="rounded-2xl border border-zinc-300 bg-white px-3 py-3 text-sm font-semibold text-zinc-800">Upload from PC</button>
+                  <button type="button" onClick={() => { const url = window.prompt('Enter featured image URL', featuredImage); if (url !== null) setFeaturedImage(url.trim()) }} className="rounded-2xl border border-zinc-300 bg-white px-3 py-3 text-sm font-semibold text-zinc-800">Use Image URL</button>
+                </div>
+                <input ref={featuredFileInputRef} type="file" accept="image/*" onChange={handleFeaturedImageUpload} className="hidden" />
               </div>
 
               <div className="rounded-3xl border border-zinc-200 bg-zinc-50 p-4">
@@ -2713,6 +2897,26 @@ function Admin() {
             <button onClick={saveContent} className="rounded-2xl bg-emerald-600 px-6 py-3 text-sm font-semibold text-white">{isCreateMode ? 'Create post' : 'Save post'}</button>
           </div>
 
+          {floatingToolbar ? (
+            <div
+              className="fixed z-[10001] flex items-center gap-1 rounded-xl bg-zinc-900 p-1.5 text-white shadow-xl"
+              style={{ top: floatingToolbar.top, left: floatingToolbar.left }}
+              onMouseDown={(event) => {
+                event.preventDefault()
+                saveEditorSelection()
+              }}
+              role="toolbar"
+              aria-label="Text editing tools"
+            >
+              <button type="button" onClick={() => applyCommand('bold')} className="rounded-lg px-2.5 py-1.5 text-xs font-bold transition hover:bg-zinc-700">Bold</button>
+              <button type="button" onClick={() => applyCommand('italic')} className="rounded-lg px-2.5 py-1.5 text-xs italic transition hover:bg-zinc-700">Italic</button>
+              <button type="button" onClick={openLinkDialog} className="rounded-lg px-2.5 py-1.5 text-xs transition hover:bg-zinc-700">Add link</button>
+              <button type="button" onClick={openImageDialog} className="rounded-lg px-2.5 py-1.5 text-xs transition hover:bg-zinc-700">Add image</button>
+            </div>
+          ) : null}
+
+          {renderImageDialog()}
+
           {buttonDialogOpen ? (
             <div className="fixed inset-0 z-[10000] flex items-center justify-center p-6">
               <div className="absolute inset-0 bg-black/40" onClick={() => setButtonDialogOpen(false)} />
@@ -2726,7 +2930,7 @@ function Admin() {
                 </div>
                 <div className="mt-6 flex justify-end gap-2">
                   <button type="button" onClick={() => setButtonDialogOpen(false)} className="rounded-2xl border border-zinc-200 bg-white px-4 py-3 text-sm text-zinc-700">Cancel</button>
-                  <button type="button" onClick={insertButton} className="rounded-2xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white">Insert</button>
+                  <button type="button" onClick={insertButton} className="rounded-2xl bg-yellow-400 px-4 py-3 text-sm font-semibold text-black">Insert</button>
                 </div>
               </div>
             </div>
@@ -2745,7 +2949,7 @@ function Admin() {
                 </div>
                 <div className="mt-6 flex justify-end gap-2">
                   <button type="button" onClick={() => setLinkDialogOpen(false)} className="rounded-2xl border border-zinc-200 bg-white px-4 py-3 text-sm text-zinc-700">Cancel</button>
-                  <button type="button" onClick={insertLink} className="rounded-2xl bg-blue-600 px-4 py-3 text-sm font-semibold text-white">Insert</button>
+                  <button type="button" onClick={insertLink} className="rounded-2xl bg-yellow-400 px-4 py-3 text-sm font-semibold text-black">Insert</button>
                 </div>
               </div>
             </div>
@@ -2770,6 +2974,7 @@ function Admin() {
                           } else if (mediaPickerMode === 'gallery' && editorType === 'areas-we-cover') {
                             setGallery((g) => Array.from(new Set([...(g || []), imageUrl])))
                           } else {
+                            restoreEditorSelection()
                             document.execCommand('insertImage', false, imageUrl)
                             setEditorHtml(document.getElementById('cms-editor')?.innerHTML || editorHtml)
                           }
@@ -3103,7 +3308,7 @@ function Admin() {
                     <div className="flex items-center gap-2">
                       <h4 className="font-semibold text-zinc-900">{user.name}</h4>
                       {!user.is_deletable && (
-                      <span className="text-xs font-medium px-2 py-1 bg-blue-100 text-blue-700 rounded">
+                      <span className="text-xs font-medium px-2 py-1 bg-yellow-100 text-yellow-800 rounded">
                         Main Admin
                       </span>
                     )}
@@ -3152,7 +3357,7 @@ function Admin() {
                       setEditingUser(user)
                       setSelectedPages(user.permissions?.pages || ['dashboard'])
                     }}
-                    className="rounded-lg bg-blue-600 px-3 py-2 text-xs font-medium text-white hover:bg-blue-700"
+                    className="rounded-lg bg-yellow-400 px-3 py-2 text-xs font-medium text-black hover:bg-yellow-500"
                   >
                     Edit Permissions
                   </button>
@@ -3526,7 +3731,7 @@ function Admin() {
               <button onClick={previewSound} className="ml-2 rounded-xl bg-zinc-200 px-3 py-1 text-sm">Preview</button>
             </div>
             {notifySoundUrl ? (
-              <div className="mt-2 text-xs text-zinc-500">Custom sound uploaded to server: <a href={notifySoundUrl} className="text-blue-600">Open</a></div>
+              <div className="mt-2 text-xs text-zinc-500">Custom sound uploaded to server: <a href={notifySoundUrl} className="text-yellow-600">Open</a></div>
             ) : notifySoundData ? (
               <div className="mt-2 text-xs text-zinc-500">Custom sound loaded locally.</div>
             ) : (
@@ -3934,7 +4139,7 @@ function Admin() {
                       )}
                     </div>
                     <div className="flex gap-2">
-                      <button onClick={() => navigate(`/admin/privacy/edit/${p.slug}`)} className="rounded-xl bg-blue-600 px-2 py-1 text-white">Edit Content</button>
+                      <button onClick={() => navigate(`/admin/privacy/edit/${p.slug}`)} className="rounded-xl bg-yellow-400 px-2 py-1 text-black">Edit Content</button>
                       <button onClick={() => { updatePrivacyPage(p.slug, { enabled: p.enabled === false ? true : false }); setCmsRefresh((v)=>v+1); try { window.dispatchEvent(new Event('storage')) } catch {} }} className={`rounded-xl px-2 py-1 ${p.enabled === false ? 'bg-yellow-400' : 'bg-zinc-100'}`}>{p.enabled === false ? 'Enable' : 'Disable'}</button>
                       <button onClick={() => { if (confirm('Delete this page?')) { removePrivacyPage(p.slug); setCmsRefresh((v)=>v+1); try { window.dispatchEvent(new Event('storage')) } catch {} } }} className="rounded-xl bg-red-500 px-2 py-1 text-white">Delete</button>
                       {editing === p.slug ? null : (
@@ -3969,7 +4174,7 @@ function Admin() {
                       )}
                     </div>
                     <div className="flex gap-2">
-                      <button onClick={() => navigate(`/admin/terms/edit/${p.slug}`)} className="rounded-xl bg-blue-600 px-2 py-1 text-white">Edit Content</button>
+                      <button onClick={() => navigate(`/admin/terms/edit/${p.slug}`)} className="rounded-xl bg-yellow-400 px-2 py-1 text-black">Edit Content</button>
                       <button onClick={() => { updateTermsPage(p.slug, { enabled: p.enabled === false ? true : false }); setCmsRefresh((v)=>v+1); try { window.dispatchEvent(new Event('storage')) } catch {} }} className={`rounded-xl px-2 py-1 ${p.enabled === false ? 'bg-yellow-400' : 'bg-zinc-100'}`}>{p.enabled === false ? 'Enable' : 'Disable'}</button>
                       <button onClick={() => { if (confirm('Delete this page?')) { removeTermsPage(p.slug); setCmsRefresh((v)=>v+1); try { window.dispatchEvent(new Event('storage')) } catch {} } }} className="rounded-xl bg-red-500 px-2 py-1 text-white">Delete</button>
                       {editing === `terms-${p.slug}` ? null : (
@@ -4004,7 +4209,7 @@ function Admin() {
                       )}
                     </div>
                     <div className="flex gap-2">
-                      <button onClick={() => navigate(`/admin/blogs/edit/${p.slug}`)} className="rounded-xl bg-blue-600 px-2 py-1 text-white">Edit Content</button>
+                      <button onClick={() => navigate(`/admin/blogs/edit/${p.slug}`)} className="rounded-xl bg-yellow-400 px-2 py-1 text-black">Edit Content</button>
                       <button onClick={() => { updateBlogPost(p.slug, { enabled: p.enabled === false ? true : false }); setCmsRefresh((v) => v + 1); try { window.dispatchEvent(new Event('storage')) } catch {} }} className={`rounded-xl px-2 py-1 ${p.enabled === false ? 'bg-yellow-400' : 'bg-zinc-100'}`}>{p.enabled === false ? 'Enable' : 'Disable'}</button>
                       <button onClick={() => { if (confirm('Delete this post?')) { removeBlogPost(p.slug); setCmsRefresh((v) => v + 1); try { window.dispatchEvent(new Event('storage')) } catch {} } }} className="rounded-xl bg-red-500 px-2 py-1 text-white">Delete</button>
                       {editing === `blog-${p.slug}` ? null : (
@@ -4045,7 +4250,7 @@ function Admin() {
                           )}
                         </div>
                         <div className="flex gap-2 ml-4">
-                          <button onClick={() => openAreaEditor(p)} className="rounded-xl bg-blue-600 hover:bg-blue-700 px-3 py-1.5 text-white text-sm font-semibold transition-colors">Edit Content</button>
+                          <button onClick={() => openAreaEditor(p)} className="rounded-xl bg-yellow-400 hover:bg-yellow-500 px-3 py-1.5 text-black text-sm font-semibold transition-colors">Edit Content</button>
                           <button onClick={() => { updateArea(p.slug || p.to.split('/').pop(), { enabled: p.enabled === false ? true : false }); setCmsRefresh((v)=>v+1); try { window.dispatchEvent(new Event('storage')) } catch {} }} className={`rounded-xl px-3 py-1.5 text-sm font-semibold transition-colors ${p.enabled === false ? 'bg-yellow-400 hover:bg-yellow-500' : 'bg-zinc-200 hover:bg-zinc-300'}`}>{p.enabled === false ? 'Enable' : 'Disable'}</button>
                           <button onClick={() => { if (confirm('Delete this area?')) { removeArea(p.slug || p.to.split('/').pop()); setCmsRefresh((v)=>v+1); try { window.dispatchEvent(new Event('storage')) } catch {} } }} className="rounded-xl bg-red-500 hover:bg-red-600 px-3 py-1.5 text-white text-sm font-semibold transition-colors">Delete</button>
                           {editing === `area-${p.slug || p.to}` ? null : (

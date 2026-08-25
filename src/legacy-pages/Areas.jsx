@@ -16,6 +16,11 @@ function Areas() {
     return value.startsWith('/') ? `${apiHost}${value}` : `${apiHost}/${value}`
   }
 
+  const getAreaSummary = (area) => {
+    const value = area.excerpt || area.meta?.about || 'Premium transfer services'
+    return String(value).replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim()
+  }
+
   useEffect(() => {
     const loadAreas = () => {
       const allAreas = getAreas().filter((a) => a.enabled !== false)
@@ -54,7 +59,7 @@ function Areas() {
                 to={area.to}
                 className="group relative overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-md transition-all duration-300 hover:shadow-2xl hover:-translate-y-1"
               >
-                <div className="aspect-video overflow-hidden bg-gradient-to-br from-slate-100 to-slate-200">
+                <div className="aspect-video overflow-hidden bg-gradient-to-br from-yellow-50 to-zinc-100">
                   {area.featured_image ? (
                     <img src={area.featured_image} alt={area.label} className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" />
                   ) : (
@@ -64,11 +69,11 @@ function Areas() {
                   )}
                 </div>
                 <div className="p-6">
-                  <h3 className="text-xl font-semibold text-black transition-colors group-hover:text-blue-600">{area.label}</h3>
-                  <p className="mt-2 line-clamp-2 text-sm text-gray-600">{area.excerpt || area.meta?.about || 'Premium transfer services'}</p>
-                  <div className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-blue-600 transition-all group-hover:gap-3">
+                  <h3 className="text-xl font-semibold text-black transition-colors group-hover:text-yellow-600">{area.label}</h3>
+                  <p className="mt-2 line-clamp-2 text-sm text-gray-600">{getAreaSummary(area)}</p>
+                  <div className="mt-4 inline-flex items-center gap-2 text-sm font-semibold text-black transition-all group-hover:gap-3">
                     View Details
-                    <span>→</span>
+                    <span className="text-yellow-600">→</span>
                   </div>
                 </div>
               </NavLink>

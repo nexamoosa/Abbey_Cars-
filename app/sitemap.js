@@ -1,4 +1,4 @@
-const publicRoutes = ['', 'about', 'fleet', 'our-fleet', 'services', 'faq', 'areas-we-cover', 'blogs', 'contact', 'booking', 'airport-transfers', 'corporate-travel', 'taxi-reading', 'taxi-wokingham', 'taxi-bracknell']
+const publicRoutes = ['', 'about', 'fleet', 'our-fleet', 'services', 'faq', 'areas-we-cover', 'blogs', 'blogs/abbey-cars-vs-uber-reading', 'contact', 'booking', 'airport-transfers', 'corporate-travel', 'taxi-reading', 'taxi-wokingham', 'taxi-bracknell']
 
 export default function sitemap() {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'

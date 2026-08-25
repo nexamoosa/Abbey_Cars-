@@ -6,10 +6,8 @@ function SocialIcon({ label, children }) {
     <a
       href="#"
       aria-label={label}
-      className="flex h-10 w-10 items-center justify-center rounded-full border transition hover:opacity-90"
+      className="flex h-10 w-10 items-center justify-center transition hover:opacity-90"
       style={{
-        backgroundColor: 'var(--site-footer)',
-        borderColor: 'var(--site-border)',
         color: 'var(--site-footer-icon)',
       }}
     >
@@ -45,7 +43,7 @@ function Footer() {
             <div className="mt-5 flex items-center gap-3">
               {getSocialLinks().length ? (
                 getSocialLinks().map((s, idx) => (
-                  <a key={idx} href={s.url} target="_blank" rel="noreferrer" aria-label={s.label} className="flex h-10 w-10 items-center justify-center rounded-full border transition hover:opacity-90" >
+                  <a key={idx} href={s.url} target="_blank" rel="noreferrer" aria-label={s.label} className="flex h-10 w-10 items-center justify-center transition hover:opacity-90" >
                     <span className="text-sm">{s.label[0] || 'S'}</span>
                   </a>
                 ))
@@ -61,13 +59,6 @@ function Footer() {
                       <rect x="2" y="2" width="20" height="20" rx="5" />
                       <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
                       <line x1="17.5" y1="6.5" x2="17.5" y2="6.5" />
-                    </svg>
-                  </SocialIcon>
-                  <SocialIcon label="LinkedIn">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-6a2 2 0 0 0-4 0v6h-4v-13h4v2" />
-                      <rect x="2" y="9" width="4" height="13" />
-                      <circle cx="4" cy="4" r="2" />
                     </svg>
                   </SocialIcon>
                 </>
@@ -91,7 +82,7 @@ function Footer() {
             <p className="text-sm font-semibold uppercase tracking-[0.24em]" style={{ color: 'var(--site-footer-icon)' }}>Contact</p>
             <div className="mt-4 space-y-3 text-sm" style={{ color: 'var(--site-footer-text)' }}>
               <div className="flex items-center gap-3">
-                <span className="flex h-9 w-9 items-center justify-center rounded-full" style={{ backgroundColor: 'var(--site-header)', color: 'var(--site-footer-icon)' }}>
+                <span className="flex h-9 w-9 items-center justify-center" style={{ color: 'var(--site-footer-icon)' }}>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.8 19.8 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.12 4.18 2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.5 12.5 0 0 0 .7 2.74 2 2 0 0 1-.45 2.11L8 9.91a16 16 0 0 0 6.09 6.09l1.34-1.34a2 2 0 0 1 2.11-.45 12.5 12.5 0 0 0 2.74.7A2 2 0 0 1 22 16.92z" />
                   </svg>
@@ -100,7 +91,7 @@ function Footer() {
               </div>
 
               <div className="flex items-center gap-3">
-                <span className="flex h-9 w-9 items-center justify-center rounded-full" style={{ backgroundColor: 'var(--site-header)', color: 'var(--site-footer-icon)' }}>
+                <span className="flex h-9 w-9 items-center justify-center" style={{ color: 'var(--site-footer-icon)' }}>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M4 4h16v16H4z" />
                     <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7" />
@@ -110,7 +101,7 @@ function Footer() {
               </div>
 
               <div className="flex items-center gap-3">
-                <span className="flex h-9 w-9 items-center justify-center rounded-full" style={{ backgroundColor: 'var(--site-header)', color: 'var(--site-footer-icon)' }}>
+                <span className="flex h-9 w-9 items-center justify-center" style={{ color: 'var(--site-footer-icon)' }}>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M12 21s-6-5.58-6-11a6 6 0 0 1 12 0c0 5.42-6 11-6 11z" />
                     <circle cx="12" cy="10" r="2.5" />

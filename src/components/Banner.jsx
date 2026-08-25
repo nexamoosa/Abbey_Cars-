@@ -9,7 +9,7 @@ function segmentToLabel(seg) {
 export default function Banner() {
   const { pathname } = useLocation()
   const [searchParams, setSearchParams] = useSearchParams()
-  if (!pathname || pathname === '/' || pathname.startsWith('/admin') || pathname === '/contact' || pathname === '/booking' || pathname === '/services' || /^\/services\/[^/]+$/.test(pathname)) return null
+  if (!pathname || pathname === '/' || pathname.startsWith('/admin') || pathname === '/contact' || pathname === '/booking' || pathname === '/services' || pathname === '/about/our-story' || /^\/services\/[^/]+$/.test(pathname)) return null
 
   const parts = pathname.split('/').filter(Boolean)
   let title = segmentToLabel(parts[parts.length - 1] || '')

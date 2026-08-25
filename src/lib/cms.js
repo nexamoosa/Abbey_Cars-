@@ -1,6 +1,7 @@
 const STORAGE_KEY = 'abbey_cms_v1'
 const MAX_DATA_URL_LENGTH = 180000
 const MAX_GALLERY_ITEMS = 12
+const DEFAULT_AREA_IMAGE = '/uploads/fleet-images/MERCEDES_S_CLASS-1786435758-f0355d40391e.png'
 
 const defaultTestimonials = [
   {
@@ -41,6 +42,41 @@ const defaultContactInfo = {
   whatsapp: '+44 7700 900123',
 }
 
+const defaultAreas = [
+  {
+    title: 'Reading',
+    label: 'Reading',
+    slug: 'reading',
+    to: '/areas-we-cover/reading',
+    enabled: true,
+    status: 'published',
+    excerpt: 'Reliable local taxi journeys across Reading and the surrounding Berkshire area.',
+    meta: {
+      description: 'Reliable local taxi journeys across Reading and the surrounding Berkshire area.',
+      breadcrumbs: 'Home > Areas We Cover > Reading',
+      services: ['Local taxi journeys', 'Airport transfers'],
+    },
+    content: '<h2>Taxi service in Reading</h2><p>Abbey Cars provides dependable local taxi journeys across Reading and the surrounding Berkshire area. Our drivers offer comfortable travel for everyday trips, airport transfers, station journeys, business travel and longer-distance bookings.</p><p>Whether you are travelling from Reading town centre, a railway station or a nearby neighbourhood, we make it simple to arrange a reliable journey with a local team.</p>',
+  },
+]
+
+const defaultBlogPosts = [
+  {
+    title: 'Abbey Cars vs Uber: Why Local Taxi Service Still Matters in Reading',
+    slug: 'abbey-cars-vs-uber-reading',
+    enabled: true,
+    published: true,
+    publishedAt: '2026-08-24',
+    excerpt: 'Compare Abbey Cars and Uber in Reading and discover why local drivers, dependable service and direct support can make every journey easier.',
+    featured_image: '/uploads/fleet-images/PLATINUM_EXECUTIVE_CARS_-_Facebook-CoverPage-1786357364-5aef72fc4ca0.png',
+    meta: {
+      title: 'Abbey Cars vs Uber in Reading | Local Taxi Guide',
+      description: 'Compare Abbey Cars and Uber in Reading. Learn why local drivers, dependable service and direct support can make your journey easier.',
+    },
+    content: '<h1>Abbey Cars vs Uber: Why Local Taxi Service Still Matters in Reading</h1><p>When you need a ride in Reading, you may be deciding between a local taxi company and a large app-based service such as Uber. Both options can be useful, but they offer different experiences. The right choice depends on what matters most for your journey: dependable availability, local knowledge, clear communication, comfort and personal service.</p><h2>Local knowledge makes a difference</h2><p>Abbey Cars is built around Reading and the surrounding Berkshire area. Local drivers understand the roads, neighbourhoods, stations, airports and common routes that matter to passengers. That local knowledge helps make journeys smoother, especially when traffic changes or you are travelling to an address that is less familiar to a national platform.</p><h2>Direct support from a local team</h2><p>With Abbey Cars, you have a direct local point of contact for your booking. If your plans change, you have a question, or you need to arrange a journey in advance, speaking with a local team can be simpler than relying only on an app. Clear communication is particularly valuable for airport transfers, early morning pickups, business travel and important events.</p><h2>Booking ahead with confidence</h2><p>App-based rides are often requested when you are already ready to travel. Abbey Cars also supports planned journeys, giving you the opportunity to share your pickup details, destination, date and time in advance. Planning ahead helps you organise airport transfers, station journeys, school runs, long-distance travel and group trips with less last-minute uncertainty.</p><h2>A vehicle suited to your journey</h2><p>Different journeys need different amounts of space. You may be travelling alone, carrying luggage, or arranging transport for several passengers. Abbey Cars offers a fleet designed for a range of local and longer journeys, so your vehicle choice can take account of passenger numbers, luggage and comfort.</p><h2>When Uber may suit you</h2><p>Uber can be convenient when the app is available in your area and you want to request a ride immediately. It may suit passengers who prefer app-based booking and are comfortable with variable availability and pricing. Comparing both options before you travel helps you choose the service that fits your priorities.</p><h2>Why passengers choose Abbey Cars</h2><ul><li>Local drivers who know Reading and Berkshire.</li><li>Advance booking for planned journeys.</li><li>Direct communication with a local taxi team.</li><li>Options for airport transfers, business travel and longer journeys.</li><li>Vehicle choices for different passenger and luggage needs.</li></ul><h2>Choose the service that fits your journey</h2><p>There is no single best option for every passenger. If you value local knowledge, planned bookings and direct support, Abbey Cars is a dependable alternative to an app-only ride. For your next journey in Reading, contact Abbey Cars or request a booking online and share the details of the trip you need.</p><p><a href="/booking">Request a booking with Abbey Cars</a> or <a href="/contact">contact our local team</a> to get started.</p>',
+  },
+]
+
 function load() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
@@ -49,7 +85,8 @@ function load() {
       areas: [],
       privacyPages: [],
       termsPages: [],
-      blogPosts: [],
+      areas: defaultAreas,
+      blogPosts: defaultBlogPosts,
       testimonials: defaultTestimonials,
       siteSettings: { siteTitle: 'Abbey Cars', maintenance: false, favicon: '', contactInfo: defaultContactInfo },
     }
@@ -57,6 +94,8 @@ function load() {
     const siteSettings = parsed.siteSettings || {}
     return {
       ...parsed,
+      areas: Array.isArray(parsed.areas) && parsed.areas.length ? parsed.areas : defaultAreas,
+      blogPosts: Array.isArray(parsed.blogPosts) && parsed.blogPosts.length ? parsed.blogPosts : defaultBlogPosts,
       testimonials: Array.isArray(parsed.testimonials) ? parsed.testimonials : defaultTestimonials,
       siteSettings: {
         siteTitle: siteSettings.siteTitle || 'Abbey Cars',
@@ -66,7 +105,7 @@ function load() {
       },
     }
   } catch (e) {
-    return { footerPages: [], areas: [], privacyPages: [], termsPages: [], blogPosts: [], testimonials: defaultTestimonials, siteSettings: { siteTitle: 'Abbey Cars', maintenance: false, favicon: '', contactInfo: defaultContactInfo } }
+    return { footerPages: [], areas: defaultAreas, privacyPages: [], termsPages: [], blogPosts: defaultBlogPosts, testimonials: defaultTestimonials, siteSettings: { siteTitle: 'Abbey Cars', maintenance: false, favicon: '', contactInfo: defaultContactInfo } }
   }
 }
 
@@ -161,6 +200,7 @@ export function getAreas() {
   const areas = load().areas || []
   return areas
     .map(normalizeArea)
+    .map((area) => area?.slug === 'reading' && !area.featured_image ? { ...area, featured_image: DEFAULT_AREA_IMAGE } : area)
     .filter(Boolean)
     .filter((area) => area.label && (area.slug || area.to))
 }

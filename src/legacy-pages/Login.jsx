@@ -15,9 +15,7 @@ function Login() {
     setMessage('')
     setMessageType('')
 
-    const loginUrl = import.meta.env.DEV
-      ? 'http://localhost/Abbey_Cars/api/login.php'
-      : 'api/login.php'
+    const loginUrl = '/api/login.php'
 
     try {
       const response = await fetch(loginUrl, {

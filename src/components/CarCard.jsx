@@ -2,48 +2,34 @@ import { FiBriefcase, FiStar, FiSuitcase, FiUsers } from '../components/Icons'
 
 function CarCard({ image, rating = 5.0, name, category, passengers, carryOns, bags, onBook }) {
   return (
-    <article className="group overflow-hidden rounded-2xl bg-white shadow-sm">
-      <div className="relative aspect-[4/3] overflow-hidden rounded-t-2xl bg-slate-100">
-        <img src={image} alt={name} className="absolute inset-0 h-full w-full object-cover" />
-
-        <div className="absolute left-3 top-3 flex items-center gap-3 text-sm font-semibold text-slate-950">
-          <span className="text-lg font-bold leading-none">{Number(rating).toFixed(1)}</span>
-          <span className="flex items-center gap-1 text-amber-400">
-            {[...Array(5)].map((_, index) => (
-              <FiStar key={index} className="h-3.5 w-3.5" />
-            ))}
-          </span>
-        </div>
-
-        <div className="absolute left-3 bottom-3 max-w-[70%] text-left text-slate-950">
-          <h2 className="text-2xl font-bold leading-tight">{name}</h2>
-          {category ? <p className="mt-1 text-sm font-medium uppercase tracking-[0.25em] text-slate-600">{category}</p> : null}
+    <article className="group overflow-hidden rounded-[24px] border border-[#e8e8e8] bg-white p-0 shadow-[0_2px_12px_rgba(15,23,42,0.08)] transition-all duration-300 hover:bg-yellow-400 hover:shadow-[0_12px_30px_rgba(15,23,42,0.12)]">
+      <div className="flex items-center gap-2 px-5 pb-2 pt-5">
+        <span className="text-[1.05rem] font-bold text-slate-900">{Number(rating).toFixed(1)}</span>
+        <div className="flex gap-1">
+          {[...Array(5)].map((_, index) => (
+            <FiStar key={index} size={16} className="fill-amber-400 text-amber-400 transition-colors duration-300 group-hover:fill-black group-hover:text-black" />
+          ))}
         </div>
       </div>
 
-      <div className="p-6">
-        <ul className="space-y-3 text-sm text-slate-600">
-          <li className="flex items-center gap-2">
-            <FiUsers className="h-4 w-4 text-slate-600" />
-            <span>{passengers} Passenger{passengers === 1 ? '' : ''}</span>
-          </li>
-          <li className="flex items-center gap-2">
-            <FiBriefcase className="h-4 w-4 text-slate-600" />
-            <span>{carryOns} Hand Carries</span>
-          </li>
-          <li className="flex items-center gap-2">
-            <FiSuitcase className="h-4 w-4 text-slate-600" />
-            <span>{bags} Bags</span>
-          </li>
-        </ul>
+      <div className="relative aspect-[4/2.7] overflow-hidden bg-transparent px-4 pb-2">
+        {image ? <img src={image} alt={name} className="h-full w-full object-contain transition-all duration-300" /> : <div className="flex h-full items-center justify-center text-slate-400">No image</div>}
+      </div>
 
-        <button
-          type="button"
-          onClick={onBook}
-          className="mt-8 inline-flex w-full items-center justify-center rounded-lg px-6 py-3 text-sm font-bold uppercase tracking-[0.15em] transition hover:brightness-95 focus:outline-none focus:ring-2"
-          style={{ backgroundColor: 'var(--site-button-bg)', color: 'var(--site-button-text)' }}
-        >
-          BOOK NOW
+      <div className="px-4 pb-1">
+        <h3 className="text-[1.15rem] font-semibold uppercase tracking-[0.08em] text-slate-900">{name}</h3>
+        {category ? <p className="mt-1 text-sm font-medium uppercase tracking-[0.25em] text-slate-600">{category}</p> : null}
+      </div>
+
+      <div className="flex items-center justify-between px-4 pb-2 pt-3 text-[0.95rem] text-slate-600">
+        <div className="flex items-center gap-2"><FiUsers size={18} className="text-slate-700" /><span>{passengers}</span></div>
+        <div className="flex items-center gap-2"><FiSuitcase size={18} className="text-slate-700" /><span>{carryOns}</span></div>
+        <div className="flex items-center gap-2"><FiBriefcase size={18} className="text-slate-700" /><span>{bags}</span></div>
+      </div>
+
+      <div className="px-4 pb-4 pt-2">
+        <button type="button" onClick={onBook} className="w-full rounded-2xl bg-yellow-400 px-4 py-2.5 text-sm font-semibold text-black transition-all duration-300 group-hover:bg-black group-hover:text-white">
+          Book Now
         </button>
       </div>
     </article>

@@ -6,6 +6,13 @@ function Blogs() {
   usePageTitle('Blog')
   const posts = getBlogPosts().filter((p) => p.enabled !== false)
 
+  const formatPublishDate = (post) => {
+    const value = post.publishedAt || post.published_at || post.createdAt || post.created_at
+    if (!value) return 'Published'
+    const date = new Date(value)
+    return Number.isNaN(date.getTime()) ? 'Published' : `Published ${date.toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}`
+  }
+
   return (
     <section className="page-card">
       <div className="mb-8">
@@ -18,11 +25,19 @@ function Blogs() {
         <div className="grid gap-6 lg:grid-cols-2">
           {posts.map((post) => (
             <article key={post.slug} className="rounded-3xl border border-zinc-200 bg-white p-6 shadow-sm">
-              <div className="mb-4 text-sm text-zinc-500">{post.meta?.description || 'Travel news and service updates'}</div>
-              <NavLink to={`/blogs/${post.slug}`} className="text-xl font-semibold text-black hover:text-blue-600">
-                {post.title}
+              {post.featured_image ? (
+                <img src={post.featured_image} alt={post.title} className="mb-5 h-56 w-full rounded-2xl object-cover" />
+              ) : null}
+              <h2 className="text-xl font-semibold text-black">
+                <NavLink to={`/blogs/${post.slug}`} className="hover:text-yellow-600">
+                  {post.title}
+                </NavLink>
+              </h2>
+              <div className="mt-2 text-sm text-zinc-500">{formatPublishDate(post)}</div>
+              <p className="mt-3 text-sm leading-6 text-zinc-600">{post.excerpt || post.meta?.description || 'Travel news and service updates.'}</p>
+              <NavLink to={`/blogs/${post.slug}`} className="mt-5 inline-flex rounded-xl bg-black px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-zinc-800">
+                Read Blog
               </NavLink>
-              <p className="mt-3 text-sm leading-6 text-zinc-600">{post.meta?.description || 'Read more about our transfer services, local coverage, and travel guides.'}</p>
             </article>
           ))}
         </div>

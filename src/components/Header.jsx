@@ -5,8 +5,12 @@ import { MdDirectionsCar, MdLocationOn, MdAirlineSeatIndividual, MdInfo } from '
 import { getAreas } from '../lib/cms'
 import { getApiBase, getFleet } from '../lib/api'
 import logoImage from '../assets/iamges/logo-01.png'
+import journeyImage from '../assets/iamges/Home page image/HeroImage1.png'
+import safetyImage from '../assets/iamges/Home page image/Safety is non-negotiable..png'
+import routeImage from '../assets/iamges/Set your route.png'
 
 const navItems = []
+const aboutImages = [journeyImage, safetyImage, routeImage]
 
 const dropdowns = [
   {
@@ -73,7 +77,6 @@ const dropdowns = [
     icon: MdInfo,
     items: [
       { to: '/about/our-story', label: 'Our Story' },
-      { to: '/about/meet-the-drivers', label: 'Meet the Drivers' },
       { to: '/about/reviews-testimonials', label: 'Reviews & Testimonials' },
       { to: '/faq', label: 'FAQ' },
     ],
@@ -195,7 +198,7 @@ function Header() {
     right: 0,
     left: 0,
     width: 'auto',
-    height: 360,
+    height: 'auto',
     transform: 'none',
     zIndex: 100,
   }
@@ -241,6 +244,7 @@ function Header() {
               style={{ color: headerText }}
             >
               Services
+              <FiChevronDown size={14} className="transition group-hover:rotate-180" />
             </NavLink>
             <div style={dropdownPanelStyle} className="dropdown-shell dropdown-full-width absolute top-full opacity-0 invisible -translate-y-2 transition-all duration-200 ease-out group-hover:opacity-100 group-hover:visible group-hover:translate-y-0">
               <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -270,6 +274,7 @@ function Header() {
               style={{ color: headerText }}
             >
               Areas
+              <FiChevronDown size={14} className="transition group-hover:rotate-180" />
             </NavLink>
             <div style={dropdownPanelStyle} className="dropdown-full-width absolute top-full opacity-0 invisible -translate-y-2 transition-all duration-150 ease-out group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 group-hover:pointer-events-auto pointer-events-none">
               <div className="dropdown-shell mx-auto max-w-5xl overflow-hidden">
@@ -291,9 +296,18 @@ function Header() {
                       <NavLink
                         key={`area-${idx}-${item.slug || item.to || item.label}`}
                         to={item.to}
-                        className="dropdown-card rounded-[12px] border px-3 py-3 text-sm font-medium transition"
+                        className="dropdown-card group overflow-hidden rounded-[12px] border text-sm font-medium transition"
                       >
-                        {item.label}
+                        <div className="aspect-[5/3] overflow-hidden bg-gradient-to-br from-yellow-50 to-zinc-100">
+                          {item.featured_image ? (
+                            <img src={resolveImageUrl(item.featured_image)} alt={item.label} className="h-full w-full object-cover transition duration-300 group-hover:scale-105" />
+                          ) : (
+                            <div className="flex h-full items-center justify-center text-[10px] uppercase tracking-[0.18em] text-zinc-400">Service area</div>
+                          )}
+                        </div>
+                        <div className="bg-white px-3 py-2.5">
+                          <p className="truncate text-sm font-semibold text-zinc-900">{item.label}</p>
+                        </div>
                       </NavLink>
                     ))}
                   </div>
@@ -398,10 +412,16 @@ function Header() {
             </NavLink>
             <div style={dropdownPanelStyle} className="dropdown-shell dropdown-full-width absolute top-full opacity-0 invisible -translate-y-2 transition-all duration-200 ease-out group-hover:opacity-100 group-hover:visible group-hover:translate-y-0">
               <div className="mx-auto max-w-7xl px-4 py-5 sm:px-6 lg:px-8">
-                <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-4">
-                  {dropdowns[3].items.map((item) => (
-                    <NavLink key={item.to || item.slug || item.label} to={item.to} className="dropdown-link block rounded px-4 py-3 text-sm">
-                      {item.label}
+                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                  {dropdowns[3].items.map((item, index) => (
+                    <NavLink key={item.to || item.slug || item.label} to={item.to} className="dropdown-card group overflow-hidden rounded-xl text-sm">
+                      <div className="relative aspect-[2.4/1] overflow-hidden bg-yellow-400">
+                        <img src={typeof aboutImages[index] === 'string' ? aboutImages[index] : aboutImages[index].src} alt="" className="h-full w-full object-cover opacity-85 transition duration-300 group-hover:scale-105" />
+                        <span className="absolute inset-0 bg-black/25" />
+                      </div>
+                      <div className="bg-white px-4 py-3 font-semibold text-zinc-900 transition group-hover:bg-yellow-400">
+                        {item.label}
+                      </div>
                     </NavLink>
                   ))}
                 </div>

@@ -129,6 +129,14 @@ export function HowToBook() {
                   }}
                 >
 
+                <span
+                  className={`absolute left-5 top-5 z-10 text-5xl font-black leading-none lg:left-8 lg:top-8 lg:text-7xl ${
+                    isDark ? 'text-yellow-400' : cardTone === 0 ? 'text-slate-950/45' : 'text-yellow-500'
+                  }`}
+                >
+                  0{index + 1}
+                </span>
+
                   <div
                     className={`
                       flex
@@ -156,23 +164,6 @@ export function HowToBook() {
 
                     {/* CONTENT */}
                     <div className="relative flex flex-1 flex-col justify-center pt-8 lg:w-[52%] lg:px-16 lg:pt-12">
-
-                      <span
-                        className={`
-                          absolute
-                          left-0
-                          top-0
-                          text-sm
-                          font-bold
-                          ${
-                            cardTone === 0
-                              ? 'text-slate-950/50'
-                              : 'text-yellow-500'
-                          }
-                        `}
-                      >
-                        0{index + 1}
-                      </span>
 
                       <Icon
                         className={`
@@ -260,8 +251,14 @@ export function HowToBook() {
 
 export function HomeFinalCTA() {
   return (
-    <section className="bg-slate-950 py-16 text-white sm:py-24">
-      <div className="mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
+    <section className="relative isolate overflow-hidden bg-black py-16 text-white sm:py-24">
+      <svg className="pointer-events-none absolute -left-24 top-1/2 hidden h-[150%] w-80 -translate-y-1/2 text-white/15 lg:block" viewBox="0 0 320 600" fill="none" aria-hidden="true">
+        <path d="M-30 55C35 8 105 18 110 82c5 65-73 74-82 137-10 68 77 74 108 29 35-51-16-112-64-75-49 38-15 111 44 131 67 23 98-43 73-91-24-47-92-40-111 15-20 59 26 113 83 117 53 4 77-37 66-78" stroke="currentColor" strokeWidth="34" strokeLinecap="round" />
+      </svg>
+      <svg className="pointer-events-none absolute -right-24 top-1/2 hidden h-[150%] w-80 -translate-y-1/2 scale-x-[-1] text-white/15 lg:block" viewBox="0 0 320 600" fill="none" aria-hidden="true">
+        <path d="M-30 55C35 8 105 18 110 82c5 65-73 74-82 137-10 68 77 74 108 29 35-51-16-112-64-75-49 38-15 111 44 131 67 23 98-43 73-91-24-47-92-40-111 15-20 59 26 113 83 117 53 4 77-37 66-78" stroke="currentColor" strokeWidth="34" strokeLinecap="round" />
+      </svg>
+      <div className="relative z-10 mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
         <h2 className="text-3xl font-bold sm:text-5xl">Ready to travel?</h2>
         <p className="mt-5 text-lg leading-8 text-slate-300">Book your taxi online and let Abbey Cars take care of your journey from start to finish.</p>
         <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">

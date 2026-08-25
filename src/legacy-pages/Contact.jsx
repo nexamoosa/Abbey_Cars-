@@ -123,14 +123,14 @@ function Contact() {
 
   return (
     <section className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
-      <div className="overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-[0_18px_60px_rgba(15,23,42,0.05)]">
+      <div className="overflow-hidden rounded-[28px] bg-white">
         <div className="grid gap-8 bg-white p-5 sm:p-8 lg:grid-cols-[1.15fr_0.85fr] lg:p-10">
           <div className="flex flex-col justify-center">
             <p className="text-xs font-medium uppercase tracking-[0.3em] text-slate-500">Contact Abbey Cars</p>
             <h1 className="mt-4 text-4xl font-semibold tracking-[-0.05em] text-slate-900 sm:text-5xl">Get in touch</h1>
             <p className="mt-3 max-w-md text-sm leading-6 text-slate-600">We’d love to hear from you. Whether you need a booking, a quote, or local travel advice, our team is here to help.</p>
 
-            <div className="mt-6 overflow-hidden rounded-[26px] border border-white/40 bg-white/40 shadow-[0_18px_35px_rgba(15,23,42,0.06)]">
+            <div className="mt-6 overflow-hidden rounded-[26px] bg-white/40">
               <div
                 className="h-[260px] w-full bg-cover bg-center sm:h-[320px]"
                 style={{
@@ -140,7 +140,7 @@ function Contact() {
             </div>
           </div>
 
-          <form onSubmit={handleSubmit} className="rounded-[28px] border border-slate-200 bg-white/90 p-5 shadow-[0_20px_40px_rgba(15,23,42,0.07)] backdrop-blur-sm sm:p-6">
+          <form onSubmit={handleSubmit} className="rounded-[28px] bg-white/90 p-5 backdrop-blur-sm sm:p-6">
             <div className="mb-4">
               <h2 className="text-2xl font-semibold text-slate-900">Contact us</h2>
               <p className="mt-1 text-sm text-slate-500">We’d love to hear from you.</p>
@@ -222,7 +222,7 @@ function Contact() {
           </form>
         </div>
 
-        <div className="mt-8 grid gap-4 rounded-[28px] border border-slate-200 bg-white p-5 shadow-[0_10px_30px_rgba(15,23,42,0.04)] md:grid-cols-3 md:p-6">
+        <div className="mt-8 grid gap-4 rounded-[28px] bg-white p-5 md:grid-cols-3 md:p-6">
           <div>
             <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">Email</p>
             <a href={`mailto:${contactInfo.email}`} className="mt-2 block text-base font-semibold text-slate-900">{contactInfo.email}</a>

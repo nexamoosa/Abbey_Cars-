@@ -13,8 +13,8 @@
   --site-footer: #272711;
   --site-footer-text: #ffffff;
   --site-footer-icon: #f8fafc;
-  --site-button-bg: #272711;
-  --site-button-text: #ffffff;
+  --site-button-bg: #facc15;
+  --site-button-text: #111827;
   --site-border: #d3d8dd;
   color-scheme: light;
   font-family: "Suisse Int'l", system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -60,7 +60,8 @@ body {
   max-width: none;
   margin: 0;
   box-sizing: border-box;
-  height: 360px;
+  min-height: 200px;
+  max-height: calc(100vh - 82px);
   transform: none;
   overflow: auto;
   border-radius: 0 0 24px 24px;
@@ -79,7 +80,7 @@ body {
 }
 
 .dropdown-label {
-  color: #6b7280;
+  color: #111827;
   letter-spacing: 0.08em;
 }
 
@@ -91,11 +92,10 @@ body {
 .dropdown-link:hover {
   background: #ffffff;
   color: #111827;
-  box-shadow: inset 3px 0 0 #facc15;
 }
 
 .dropdown-feature {
-  background: #e7e9ec;
+  background: #facc15;
   color: #111827;
 }
 
@@ -154,6 +154,10 @@ a {
 button {
   font: inherit;
   cursor: pointer;
+}
+
+button.font-bold {
+  font-weight: 700;
 }
 
 a,

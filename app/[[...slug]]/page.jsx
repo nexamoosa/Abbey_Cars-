@@ -9,6 +9,11 @@ const pageMetadata = {
     title: 'About Abbey Cars',
     description: 'Learn about Abbey Cars and our trusted local taxi service in Reading and Berkshire.',
   },
+  'about/our-story': {
+    title: 'Our Story | Local Taxi Service in Reading',
+    description: 'Discover the Abbey Cars story and our commitment to reliable local taxis, airport transfers and personal service across Reading and Berkshire.',
+    keywords: ['Abbey Cars', 'local taxi service Reading', 'Reading taxi company', 'airport transfers Berkshire', 'executive travel Reading'],
+  },
   fleet: {
     title: 'Our Fleet',
     description: 'Explore the comfortable and reliable vehicles available from Abbey Cars.',
@@ -37,6 +42,10 @@ const pageMetadata = {
     title: 'Book a Taxi',
     description: 'Request a reliable taxi journey with Abbey Cars in Reading and Berkshire.',
   },
+  'blogs/abbey-cars-vs-uber-reading': {
+    title: 'Abbey Cars vs Uber in Reading | Local Taxi Guide',
+    description: 'Compare Abbey Cars and Uber in Reading. Learn why local drivers, dependable service and direct support can make your journey easier.',
+  },
 }
 
 export async function generateMetadata({ params }) {
@@ -48,6 +57,8 @@ export async function generateMetadata({ params }) {
   return {
     title: metadata.title,
     description: metadata.description,
+    keywords: metadata.keywords,
+    robots: { index: true, follow: true },
     alternates: { canonical },
     openGraph: {
       title: `${metadata.title} | Abbey Cars`,
