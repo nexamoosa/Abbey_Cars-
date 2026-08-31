@@ -19,6 +19,7 @@ function Layout() {
   const isServiceDetail = /^\/services\/[^/]+$/.test(location.pathname)
   const isServicesPage = location.pathname === '/services'
   const isAreaPage = location.pathname.startsWith('/areas-we-cover')
+  const isAboutPage = location.pathname === '/about'
   const isOurStoryPage = location.pathname === '/about/our-story'
 
   return (
@@ -32,8 +33,8 @@ function Layout() {
       <Header />
       <Banner />
 
-      <main className={`flex-1 ${isHome || isServiceDetail || isServicesPage || isOurStoryPage || isAreaPage ? '' : 'py-8'}`} style={{ backgroundColor: 'var(--site-bg)' }}>
-        <div className={`${isHome || isServiceDetail || isServicesPage || isOurStoryPage || isAreaPage ? 'w-full px-0' : 'mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8'}`}>
+      <main className={`flex-1 ${isHome || isServiceDetail || isServicesPage || isAboutPage || isOurStoryPage || isAreaPage ? '' : 'py-8'}`} style={{ backgroundColor: 'var(--site-bg)' }}>
+        <div className={`${isHome || isServiceDetail || isServicesPage || isAboutPage || isOurStoryPage || isAreaPage ? 'w-full px-0' : 'mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8'}`}>
           <Outlet />
         </div>
       </main>

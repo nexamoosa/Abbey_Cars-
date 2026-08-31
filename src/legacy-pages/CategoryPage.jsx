@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react'
 import { NavLink, useParams } from 'react-router-dom'
+import { FaMobileAlt } from 'react-icons/fa'
 import { getBlogPosts, getPages } from '../lib/cms'
 import usePageTitle from '../hooks/usePageTitle'
 import Testimonials from '../components/UI/services/Testimonials'
 import safetyImage from '../assets/iamges/Home page image/Safety is non-negotiable..png'
+import homeHeroImage from '../assets/iamges/Home page image/HeroImage1.png'
 
 const pageData = {
   services: [
@@ -227,7 +229,7 @@ function CategoryPage() {
         <section className="relative overflow-hidden bg-black text-white">
           <div className="relative mx-auto max-w-6xl px-4 py-24 sm:px-6 sm:py-32 lg:px-8">
             <p className="text-sm font-semibold uppercase tracking-[0.28em] text-yellow-400">About Abbey Cars</p>
-            <h1 className="mt-5 max-w-4xl text-4xl font-black leading-tight sm:text-6xl">A local taxi service built around people, not just journeys.</h1>
+            <h1 className="mt-5 max-w-4xl text-4xl font-semibold leading-tight sm:text-6xl">A local taxi service built around people, not just journeys.</h1>
             <p className="mt-6 max-w-2xl text-lg leading-8 text-white/80">From a trusted local booking to a comfortable arrival, Abbey Cars brings dependable Reading taxi services and thoughtful personal service together.</p>
             <div className="mt-8 flex flex-wrap gap-3">
               <NavLink to="/booking" className="inline-flex items-center rounded-full bg-yellow-400 px-6 py-3 text-sm font-bold text-slate-950 transition hover:bg-yellow-300">Book a journey</NavLink>
@@ -247,7 +249,7 @@ function CategoryPage() {
         <section className="mx-auto grid max-w-6xl gap-12 px-4 py-16 sm:px-6 md:py-24 lg:grid-cols-[1fr_0.85fr] lg:px-8">
           <div>
             <p className="text-sm font-bold uppercase tracking-[0.24em] text-yellow-600">Our story</p>
-            <h2 className="mt-4 text-3xl font-black leading-tight sm:text-5xl">Good taxi service starts with knowing who you are serving.</h2>
+            <h2 className="mt-4 text-3xl font-semibold leading-tight sm:text-5xl">Good taxi service starts with knowing who you are serving.</h2>
             <div className="mt-6 space-y-5 text-base leading-8 text-slate-600">
               <p>Abbey Cars was shaped around a simple idea: local passengers deserve a taxi service that knows the area, respects their time and makes it easy to speak to a real team.</p>
               <p>That means understanding the roads around Reading, planning ahead for airport and station journeys, and treating every booking as more than a pickup and a destination.</p>
@@ -263,7 +265,7 @@ function CategoryPage() {
           <div className="mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
             <div className="max-w-2xl">
               <p className="text-sm font-bold uppercase tracking-[0.24em] text-yellow-600">What guides us</p>
-              <h2 className="mt-4 text-3xl font-black sm:text-5xl">The standards behind every booking</h2>
+              <h2 className="mt-4 text-3xl font-semibold sm:text-5xl">The standards behind every booking</h2>
             </div>
             <div className="mt-10 grid gap-5 md:grid-cols-3">
               {[
@@ -272,7 +274,7 @@ function CategoryPage() {
                 ['Respectful travel', 'We treat passengers, luggage, homes, workplaces and time with care.'],
               ].map(([title, text]) => (
                 <article key={title} className="border-t-4 border-yellow-400 bg-white p-6 shadow-sm">
-                  <h3 className="text-xl font-bold">{title}</h3>
+                  <h3 className="text-xl font-semibold">{title}</h3>
                   <p className="mt-3 leading-7 text-slate-600">{text}</p>
                 </article>
               ))}
@@ -284,7 +286,7 @@ function CategoryPage() {
           <div className="grid gap-10 lg:grid-cols-[0.75fr_1.25fr] lg:gap-16">
             <div>
               <p className="text-sm font-bold uppercase tracking-[0.24em] text-yellow-600">Here to help</p>
-              <h2 className="mt-4 text-3xl font-black leading-tight sm:text-5xl">One local team for the journeys that matter.</h2>
+              <h2 className="mt-4 text-3xl font-semibold leading-tight sm:text-5xl">One local team for the journeys that matter.</h2>
               <p className="mt-5 max-w-md leading-7 text-slate-600">From the school run to an airport departure, Abbey Cars helps passengers arrange comfortable travel across Reading and Berkshire.</p>
             </div>
             <div className="grid gap-x-8 gap-y-8 sm:grid-cols-2">
@@ -295,7 +297,7 @@ function CategoryPage() {
                 ['Specialist and group travel', 'Practical transport for families, groups, luggage, school runs and accessible travel needs.'],
               ].map(([title, text]) => (
                 <div key={title} className="border-t border-slate-300 pt-4">
-                  <h3 className="text-lg font-bold text-slate-950">{title}</h3>
+                  <h3 className="text-lg font-semibold text-slate-950">{title}</h3>
                   <p className="mt-2 text-sm leading-6 text-slate-600">{text}</p>
                 </div>
               ))}
@@ -307,7 +309,7 @@ function CategoryPage() {
           <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr]">
             <div>
               <p className="text-sm font-bold uppercase tracking-[0.24em] text-yellow-600">How we work</p>
-              <h2 className="mt-4 text-3xl font-black sm:text-5xl">A better journey is made of small details.</h2>
+              <h2 className="mt-4 text-3xl font-semibold sm:text-5xl">A better journey is made of small details.</h2>
             </div>
             <div className="space-y-8">
               {[
@@ -316,17 +318,17 @@ function CategoryPage() {
                 ['03', 'Follow through', 'From the first confirmation to arrival, our focus is a calm, professional and dependable experience.'],
               ].map(([number, title, text]) => (
                 <div key={number} className="grid gap-4 border-b border-slate-200 pb-8 sm:grid-cols-[64px_1fr]">
-                  <span className="text-2xl font-black text-yellow-500">{number}</span>
-                  <div><h3 className="text-xl font-bold">{title}</h3><p className="mt-2 leading-7 text-slate-600">{text}</p></div>
+                  <span className="text-2xl font-semibold text-yellow-500">{number}</span>
+                  <div><h3 className="text-xl font-semibold">{title}</h3><p className="mt-2 leading-7 text-slate-600">{text}</p></div>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        <section className="bg-slate-950 text-white">
+        <section className="bg-black text-white">
           <div className="mx-auto flex max-w-6xl flex-col gap-8 px-4 py-16 sm:px-6 md:flex-row md:items-center md:justify-between md:py-20 lg:px-8">
-            <div><p className="text-sm font-bold uppercase tracking-[0.24em] text-yellow-400">Travel with Abbey Cars</p><h2 className="mt-3 max-w-2xl text-3xl font-black sm:text-4xl">Ready to make your next journey simpler?</h2><p className="mt-3 max-w-xl leading-7 text-white/70">Book a local taxi, arrange an airport transfer or speak with our team about your plans.</p></div>
+            <div><p className="text-sm font-bold uppercase tracking-[0.24em] text-yellow-400">Travel with Abbey Cars</p><h2 className="mt-3 max-w-2xl text-3xl font-semibold sm:text-4xl">Ready to make your next journey simpler?</h2><p className="mt-3 max-w-xl leading-7 text-white/70">Book a local taxi, arrange an airport transfer or speak with our team about your plans.</p></div>
             <div className="flex shrink-0 flex-wrap gap-3"><NavLink to="/booking" className="rounded-full bg-yellow-400 px-6 py-3 font-bold text-slate-950 transition hover:bg-yellow-300">Book online</NavLink><NavLink to="/services" className="rounded-full border border-white/30 px-6 py-3 font-bold text-white transition hover:border-yellow-400 hover:text-yellow-400">Explore services</NavLink></div>
           </div>
         </section>
@@ -363,17 +365,58 @@ function CategoryPage() {
                 <div className="blog-detail-content" dangerouslySetInnerHTML={{ __html: removeDuplicateBlogHeading(item.content) }} />
               ) : <div />}
             </article>
-            <aside className="h-fit rounded-2xl border border-zinc-200 bg-zinc-50 p-5 lg:sticky lg:top-6">
-              <h2 className="text-lg font-bold text-zinc-900">Related blogs</h2>
-              {relatedPosts.length ? (
-                <div className="mt-4 space-y-4">
-                  {relatedPosts.map((post) => (
-                    <NavLink key={post.slug} to={`/blogs/${post.slug}`} className="block border-b border-zinc-200 pb-4 text-sm font-semibold text-zinc-800 transition hover:text-yellow-600 last:border-b-0 last:pb-0">
-                      {post.title}
-                    </NavLink>
-                  ))}
+            <aside className="h-fit space-y-5 lg:sticky lg:top-6">
+              <div className="rounded-[1.5rem] border border-zinc-200 bg-zinc-50 p-4 shadow-sm sm:p-5">
+                <h2 className="text-lg font-bold text-zinc-900">Related blogs</h2>
+                {relatedPosts.length ? (
+                  <div className="mt-4 space-y-3">
+                    {relatedPosts.map((post, index) => {
+                      const thumbSource = post.featured_image || [homeHeroImage, safetyImage, homeHeroImage][index % 3]
+                      const thumbUrl = typeof thumbSource === 'string' ? thumbSource : (thumbSource?.src || homeHeroImage?.src || homeHeroImage)
+                      return (
+                        <NavLink key={post.slug} to={`/blogs/${post.slug}`} className="group flex gap-3 rounded-2xl border border-zinc-200 bg-white p-2.5 text-left transition hover:-translate-y-0.5 hover:border-yellow-300 hover:shadow-sm">
+                          <img src={thumbUrl} alt={post.title} className="h-20 w-20 shrink-0 rounded-xl object-cover" />
+                          <div className="min-w-0 flex-1">
+                            <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-yellow-600">Read article</p>
+                            <span className="mt-1 block text-sm font-semibold leading-5 text-zinc-800 transition group-hover:text-yellow-600">
+                              {post.title}
+                            </span>
+                          </div>
+                        </NavLink>
+                      )
+                    })}
+                  </div>
+                ) : <p className="mt-3 text-sm leading-6 text-zinc-600">More articles are coming soon.</p>}
+              </div>
+
+              <div className="overflow-hidden rounded-[1.5rem] border border-slate-200 bg-black p-4 text-white shadow-[0_18px_40px_rgba(15,23,42,0.12)]">
+                <div className="flex items-center justify-between gap-3">
+                  <div>
+                    <p className="text-[10px] font-bold uppercase tracking-[0.22em] text-yellow-400">App</p>
+                    <h3 className="mt-2 text-lg font-semibold text-white">Download our app</h3>
+                  </div>
+                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-yellow-400 text-black">
+                    <FaMobileAlt className="text-lg" />
+                  </div>
                 </div>
-              ) : <p className="mt-3 text-sm leading-6 text-zinc-600">More articles are coming soon.</p>}
+
+                <a
+                  href="https://play.google.com/store/apps/details?id=com.abbeycars.passengerapp"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="mt-4 block rounded-2xl border border-white/10 bg-white p-3 text-center transition hover:border-yellow-400"
+                >
+                  <img
+                    src="https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.abbeycars.passengerapp"
+                    alt="Google Play QR code for Abbey Cars app"
+                    className="mx-auto aspect-square w-full max-w-[170px] object-contain"
+                  />
+                </a>
+
+                <p className="mt-3 text-center text-[10px] font-bold uppercase tracking-[0.18em] text-zinc-300">
+                  Scan to download
+                </p>
+              </div>
             </aside>
           </div>
         ) : null}
