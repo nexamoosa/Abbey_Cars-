@@ -25,6 +25,7 @@ function Hero_our_fleets() {
   const [bookingLoading, setBookingLoading] = useState(false)
   const [bookingAccessKeys, setBookingAccessKeys] = useState([])
   const containerRef = useRef(null)
+  const touchStartX = useRef(null)
 
   const apiHost = window.location.origin
 
@@ -91,6 +92,20 @@ function Hero_our_fleets() {
 
   const handleNext = () => {
     setCurrentIndex((prev) => Math.min(maxIndex, prev + 1))
+  }
+
+  const handleTouchStart = (event) => {
+    touchStartX.current = event.touches[0]?.clientX ?? null
+  }
+
+  const handleTouchEnd = (event) => {
+    if (touchStartX.current === null) return
+    const touchEndX = event.changedTouches[0]?.clientX ?? touchStartX.current
+    const distance = touchEndX - touchStartX.current
+    touchStartX.current = null
+    if (Math.abs(distance) < 45 || vehicles.length <= 1) return
+    if (distance < 0) handleNext()
+    else handlePrevious()
   }
 
   const openBooking = (vehicle) => {
@@ -247,7 +262,14 @@ function Hero_our_fleets() {
 
         {/* Vehicle Cards */}
         {!loading && !error && vehicles.length > 0 && (
-          <div ref={containerRef} className="grid gap-6 grid-cols-1 md:grid-cols-4 overflow-hidden transition-all duration-500 ease-in-out">
+          <div
+            ref={containerRef}
+            className="grid grid-cols-1 gap-6 overflow-hidden transition-all duration-500 ease-in-out md:grid-cols-4"
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+            onTouchCancel={() => { touchStartX.current = null }}
+            style={{ touchAction: 'pan-y' }}
+          >
             {visibleVehicles.map((vehicle) => (
               <article
                 key={vehicle.id}

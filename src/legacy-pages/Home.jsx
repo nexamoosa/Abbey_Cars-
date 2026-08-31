@@ -5,7 +5,7 @@ import ServiceGrid from '../components/UI/services/ServiceGrid'
 import ServiceAreas from '../components/UI/services/ServiceAreas'
 import Testimonials from '../components/UI/services/Testimonials'
 import WhyChooseUs from '../components/UI/services/WhyChooseUs'
-import { HomeFinalCTA, HowToBook, ReadingIntro } from '../components/UI/HomeContentSections'
+import { DownloadApp, HomeFinalCTA, HowToBook, ReadingIntro } from '../components/UI/HomeContentSections'
 import usePageTitle from '../hooks/usePageTitle'
 
 function Home() {
@@ -20,8 +20,9 @@ function Home() {
       <ReadingIntro />
       <ServiceAreas />
       <WhyChooseUs />
-      <Testimonials />
       <HowToBook />
+      <DownloadApp />
+      <Testimonials />
       <HomeFinalCTA />
     </main>
   )

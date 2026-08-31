@@ -1,6 +1,10 @@
 import { NavLink } from 'react-router-dom'
+import { getSiteSettings } from '../../lib/cms'
 
 function ServicesCTA() {
+  const phoneNumber = getSiteSettings().contactInfo?.phone || '+44 118 945 4545'
+  const telHref = phoneNumber.replace(/\s+/g, '')
+
   return (
     <section className="relative overflow-hidden bg-black py-16 sm:py-24 bg-white">
       <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
@@ -12,7 +16,6 @@ function ServicesCTA() {
             Booking with Abbey Cars is quick and easy. Whether you need a Reading taxi UK service for a local journey, an airport transfer or a longer trip, we are ready to get you where you need to go.
           </p>
 
-          {/* CTAs */}
           <div className="mt-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-center">
             <NavLink
               to="/booking"
@@ -21,16 +24,10 @@ function ServicesCTA() {
               Book Online
             </NavLink>
             <a
-              href="tel:+441189798484"
+              href={`tel:${telHref}`}
               className="inline-flex items-center justify-center rounded-full border border-yellow-400 bg-transparent px-8 py-3 text-base font-semibold text-yellow-400 transition hover:bg-yellow-400/10"
             >
               Call Us Now
-            </a>
-            <a
-              href="https://wa.me/441189798484"
-              className="inline-flex items-center justify-center rounded-full border border-white/30 px-8 py-3 text-base font-semibold text-white transition hover:border-white"
-            >
-              WhatsApp Us
             </a>
           </div>
         </div>

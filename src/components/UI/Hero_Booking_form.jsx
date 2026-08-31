@@ -398,7 +398,7 @@ function Hero_Booking_form() {
           <div className="flex flex-col gap-3 border-t border-white/10 pt-4 sm:flex-row sm:items-center sm:justify-between">
             <p className="text-xs leading-5 text-slate-500">
               We only use your information to process and confirm your booking. Read our{' '}
-              <a href="https://example.com/privacy" className="font-medium text-slate-300 underline underline-offset-2 hover:text-white" target="_blank" rel="noopener noreferrer">
+              <a href="/about/privacy-policy" className="font-medium text-slate-300 underline underline-offset-2 hover:text-white">
                 Privacy Policy
               </a>
               .

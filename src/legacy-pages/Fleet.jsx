@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { getFormSettings, getFleet, getApiBase, saveBooking } from '../lib/api'
-import { MdDirectionsCar } from '../components/Icons'
 import { FiBell, FiStar, FiCalendar, FiClock } from '../components/Icons'
 import CarCard from '../components/CarCard'
 import usePageTitle from '../hooks/usePageTitle'
@@ -90,14 +89,6 @@ function Fleet() {
     setPostBookingRating(0)
     setBookingModalOpen(true)
   }, [location.search, loading, vehicles])
-
-  const mostBooked = useMemo(() => {
-    return visibleVehicles.reduce((best, vehicle) => {
-      const bookings = Number(vehicle.bookings ?? 0)
-      if (!best || bookings > Number(best.bookings ?? 0)) return vehicle
-      return best
-    }, null)
-  }, [visibleVehicles])
 
   const openBooking = (vehicle) => {
     setSelectedVehicle(vehicle)
@@ -188,39 +179,6 @@ function Fleet() {
 
   return (
     <section className="page-card space-y-6">
-      <div className="rounded-[2rem] border border-slate-200 bg-slate-50 p-8 shadow-sm">
-        <div className="grid gap-8 lg:grid-cols-[1.8fr_1fr]">
-          <div className="space-y-4">
-            <span className="inline-flex items-center gap-2 rounded-full bg-slate-900 px-4 py-2 text-xs uppercase tracking-[0.35em] text-white">
-              <MdDirectionsCar size={18} /> OUR FLEET
-            </span>
-            <h1 className="text-4xl font-semibold tracking-tight text-slate-900 sm:text-5xl">Flat car cards, clear specs, and instant booking.</h1>
-            <p className="max-w-2xl text-sm text-slate-600 sm:text-base">Each card shows the vehicle image, specs, rating, bookings and a prominent book button. The booking form opens in a focused popup for the selected car.</p>
-          </div>
-
-          <div className="overflow-hidden rounded-[1.75rem] border border-slate-200 bg-white shadow-sm">
-            {mostBooked?.image ? (
-              <div className="h-40 overflow-hidden bg-slate-100">
-                <img src={resolveImageUrl(mostBooked.image)} alt={mostBooked.name} className="h-full w-full object-cover" />
-              </div>
-            ) : null}
-            <div className="p-6">
-              <div className="flex items-center justify-between gap-4">
-                <div>
-                  <p className="text-xs uppercase tracking-[0.35em] text-slate-500">Top booked</p>
-                  <h2 className="mt-3 text-2xl font-semibold text-slate-900">{mostBooked?.name || 'No top pick yet'}</h2>
-                </div>
-                <span className="rounded-full bg-slate-100 px-3 py-2 text-xs font-semibold uppercase tracking-[0.25em] text-slate-700">
-                  {mostBooked ? `${Number(mostBooked.bookings || 0)} bookings` : 'No bookings yet'}
-                </span>
-              </div>
-              {mostBooked?.category ? <p className="mt-3 text-sm uppercase tracking-[0.25em] text-slate-500">{mostBooked.category}</p> : null}
-              <p className="mt-5 text-sm leading-6 text-slate-600">The current top choice in our fleet, selected by customers for reliability, comfort, and executive travel.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
       {loading ? (
         <div className="rounded-[2rem] border border-dashed border-slate-300 bg-white p-8 text-center text-sm text-slate-500">Loading fleet...</div>
       ) : error ? (

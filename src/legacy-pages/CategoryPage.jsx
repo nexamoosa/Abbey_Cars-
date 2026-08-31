@@ -134,29 +134,79 @@ function CategoryPage() {
 
   if (category === 'areas-we-cover') {
     return (
-      <section className="bg-white text-zinc-900">
-        <div className="mx-auto max-w-6xl px-4 py-10 md:py-14">
-          {galleryImages.length > 0 && (
-            <div className="mb-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {galleryImages.map((image, index) => (
-                <img
-                  key={`${image}-${index}`}
-                  src={image}
-                  alt={`${item.label} gallery ${index + 1}`}
-                  className="h-52 w-full rounded-2xl object-cover shadow-sm ring-1 ring-zinc-200"
-                />
-              ))}
-            </div>
-          )}
-
-          <div className="max-w-4xl rounded-3xl bg-white p-0">
-            {areaDescription ? <p className="mb-6 text-lg leading-8 text-zinc-700">{areaDescription}</p> : null}
-            {item.content ? (
-              <div className="cms-content prose max-w-none text-zinc-800" dangerouslySetInnerHTML={{ __html: item.content }} />
-            ) : null}
+      <section className="w-full bg-white text-black">
+        <div className="relative w-full overflow-hidden bg-black text-white">
+          {heroImage ? <img src={heroImage} alt="" className="absolute inset-0 h-full w-full object-cover opacity-55" /> : null}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/65 to-black/35" />
+          <div className="relative mx-auto max-w-7xl px-4 py-24 text-center sm:px-6 sm:py-32 lg:px-8">
+            <p className="text-xs font-bold uppercase tracking-[0.3em] text-yellow-400">Areas we cover</p>
+            <h1 className="mt-5 max-w-4xl text-4xl font-semibold leading-[1.08] sm:text-6xl">{item.label || item.title}</h1>
+            {areaDescription ? <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-white/75">{areaDescription}</p> : null}
+            <NavLink to="/booking" className="mt-8 inline-flex rounded-full bg-yellow-400 px-6 py-3 font-bold text-black transition hover:bg-yellow-300">Book your journey</NavLink>
           </div>
         </div>
+        <div className="w-full border-y border-yellow-500/30 bg-yellow-400 text-black">
+          <div className="mx-auto grid max-w-7xl gap-5 px-4 py-7 text-center sm:grid-cols-3 sm:px-6 lg:px-8">
+            <div><p className="text-2xl font-semibold">24/7</p><p className="mt-1 text-sm font-medium text-slate-950/70">Taxi service availability</p></div>
+            <div><p className="text-2xl font-semibold">Local</p><p className="mt-1 text-sm font-medium text-slate-950/70">Reading drivers and route knowledge</p></div>
+            <div><p className="text-2xl font-semibold">Direct</p><p className="mt-1 text-sm font-medium text-slate-950/70">Simple online booking</p></div>
+          </div>
+        </div>
+        <div className="w-full px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
+          {galleryImages.length > 0 ? <div className="mx-auto mb-16 grid max-w-6xl gap-5 sm:grid-cols-2 lg:grid-cols-3">{galleryImages.map((image, index) => <img key={`${image}-${index}`} src={image} alt={`${item.label} gallery ${index + 1}`} className="h-64 w-full rounded-3xl object-cover shadow-sm" />)}</div> : null}
+          {item.content ? <div className="area-page-content cms-content mx-auto max-w-5xl" dangerouslySetInnerHTML={{ __html: item.content }} /> : null}
+        </div>
+        <div className="w-full bg-black py-16 text-white sm:py-20"><div className="mx-auto flex max-w-7xl flex-col items-center gap-6 px-4 text-center sm:px-6 lg:px-8"><div><p className="text-xs font-bold uppercase tracking-[0.3em] text-yellow-400">Travel with Abbey Cars</p><h2 className="mt-3 text-3xl font-semibold leading-[1.12] sm:text-[2.65rem]">Ready to book your journey?</h2></div><NavLink to="/booking" className="inline-flex w-fit rounded-full bg-yellow-400 px-6 py-3 font-bold text-black transition hover:bg-yellow-300">Book online</NavLink></div></div>
       </section>
+    )
+  }
+
+  if (category === 'about' && slug === 'privacy-policy') {
+    return (
+      <article className="bg-white text-slate-900">
+        <div className="mx-auto max-w-4xl px-4 py-12 sm:px-6 md:py-16 lg:px-8">
+          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-yellow-600">Abbey Cars</p>
+          <h1 className="mt-3 text-4xl font-semibold leading-tight sm:text-5xl">Privacy Policy</h1>
+          <p className="mt-4 text-sm text-slate-500">Last updated: 25 August 2026</p>
+
+          <div className="mt-10 space-y-8 text-base leading-7 text-slate-700">
+            <section>
+              <h2 className="text-2xl font-semibold text-slate-900">Who we are</h2>
+              <p className="mt-3">Abbey Cars provides local taxi journeys, airport transfers and private travel across Reading and Berkshire. For privacy questions, contact us at <a className="font-semibold text-slate-900 underline" href="mailto:hello@abbeycars.com">hello@abbeycars.com</a> or <a className="font-semibold text-slate-900 underline" href="tel:+441189454545">+44 118 945 4545</a>.</p>
+            </section>
+
+            <section>
+              <h2 className="text-2xl font-semibold text-slate-900">Information we collect</h2>
+              <p className="mt-3">When you request a booking, we may collect your name, phone number, email address, pickup location, drop-off location, travel date, travel time, passenger count, luggage details, preferred vehicle and any message you provide. When you contact us, we collect the name, contact details and message you submit.</p>
+            </section>
+
+            <section>
+              <h2 className="text-2xl font-semibold text-slate-900">How we use your information</h2>
+              <p className="mt-3">We use this information to review and confirm bookings, contact you about your journey, answer enquiries, provide the requested transport service, maintain booking records and protect the security of our website. We do not sell your personal information.</p>
+            </section>
+
+            <section>
+              <h2 className="text-2xl font-semibold text-slate-900">Sharing your information</h2>
+              <p className="mt-3">We share information only when necessary to provide the service, operate the website or comply with the law. Booking and contact submissions may be processed by our form delivery provider so that we can receive and respond to your request.</p>
+            </section>
+
+            <section>
+              <h2 className="text-2xl font-semibold text-slate-900">How long we keep information</h2>
+              <p className="mt-3">We keep booking and enquiry information only for as long as needed to manage the request, provide our services, maintain accurate business records and meet legal or accounting obligations. We securely delete information when it is no longer required.</p>
+            </section>
+
+            <section>
+              <h2 className="text-2xl font-semibold text-slate-900">Your choices and rights</h2>
+              <p className="mt-3">You can ask us what personal information we hold about you, request a correction or ask us to delete it where the law allows. You can also object to or restrict certain processing. Contact <a className="font-semibold text-slate-900 underline" href="mailto:hello@abbeycars.com">hello@abbeycars.com</a> to make a request.</p>
+            </section>
+
+            <section>
+              <h2 className="text-2xl font-semibold text-slate-900">Contact</h2>
+              <p className="mt-3">Abbey Cars, 18 Station Road, Reading, Berkshire, RG1 1AA. Email: <a className="font-semibold text-slate-900 underline" href="mailto:hello@abbeycars.com">hello@abbeycars.com</a>.</p>
+            </section>
+          </div>
+        </div>
+      </article>
     )
   }
 
@@ -167,7 +217,7 @@ function CategoryPage() {
       name: 'Abbey Cars',
       description: 'Abbey Cars provides reliable local taxi journeys, airport transfers and executive travel across Reading and Berkshire.',
       areaServed: ['Reading', 'Berkshire'],
-      telephone: '+44 118 900 0000',
+      telephone: '+44 118 945 4545',
       url: `${window.location.origin}/about/our-story`,
     }
 
@@ -225,6 +275,29 @@ function CategoryPage() {
                   <h3 className="text-xl font-bold">{title}</h3>
                   <p className="mt-3 leading-7 text-slate-600">{text}</p>
                 </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="mx-auto max-w-6xl px-4 py-16 sm:px-6 md:py-24 lg:px-8">
+          <div className="grid gap-10 lg:grid-cols-[0.75fr_1.25fr] lg:gap-16">
+            <div>
+              <p className="text-sm font-bold uppercase tracking-[0.24em] text-yellow-600">Here to help</p>
+              <h2 className="mt-4 text-3xl font-black leading-tight sm:text-5xl">One local team for the journeys that matter.</h2>
+              <p className="mt-5 max-w-md leading-7 text-slate-600">From the school run to an airport departure, Abbey Cars helps passengers arrange comfortable travel across Reading and Berkshire.</p>
+            </div>
+            <div className="grid gap-x-8 gap-y-8 sm:grid-cols-2">
+              {[
+                ['Local taxi journeys', 'Reliable travel across Reading, nearby communities and longer local routes.'],
+                ['Airport transfers', 'Planned pickups for Heathrow, Gatwick, Luton, Stansted and other major airports.'],
+                ['Business and executive travel', 'Comfortable, professional journeys for meetings, events and regular bookings.'],
+                ['Specialist and group travel', 'Practical transport for families, groups, luggage, school runs and accessible travel needs.'],
+              ].map(([title, text]) => (
+                <div key={title} className="border-t border-slate-300 pt-4">
+                  <h3 className="text-lg font-bold text-slate-950">{title}</h3>
+                  <p className="mt-2 text-sm leading-6 text-slate-600">{text}</p>
+                </div>
               ))}
             </div>
           </div>

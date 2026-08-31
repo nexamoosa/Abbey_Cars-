@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { FaArrowRight, FaCalendarAlt, FaCarSide, FaMapMarkerAlt, FaPhoneAlt, FaUser, FaUsers, FaCheckCircle } from 'react-icons/fa'
+import { FaArrowRight, FaCalendarAlt, FaCarSide, FaMapMarkerAlt, FaPhoneAlt, FaUser, FaUsers, FaCheckCircle, FaMobileAlt } from 'react-icons/fa'
+import { getSiteSettings } from '../../lib/cms'
 import journeyImage from '../../assets/iamges/Home page image/HeroImage1.png'
 import safetyImage from '../../assets/iamges/Home page image/Safety is non-negotiable..png'
 import essentialsImage from '../../assets/iamges/Start with the essentials.png'
@@ -15,7 +16,7 @@ export function ReadingIntro() {
   return (
     <section className="bg-white px-4 py-12 sm:px-6 sm:py-20 lg:px-8">
       <div className="mx-auto grid max-w-[1440px] overflow-visible rounded-[28px] bg-yellow-400 lg:grid-cols-[.95fr_1.05fr]">
-        <div className="relative min-h-[360px] overflow-hidden sm:min-h-[500px]">
+        <div className="relative min-h-[360px] overflow-visible sm:min-h-[500px]">
           <svg
             className="pointer-events-none absolute left-1/2 top-1/2 z-0 h-auto w-[150%] max-w-none -translate-x-1/2 -translate-y-1/2"
             width="1200"
@@ -33,7 +34,7 @@ export function ReadingIntro() {
               strokeLinejoin="round"
             />
           </svg>
-          <img src={typeof safetyImage === 'string' ? safetyImage : safetyImage.src} alt="Passenger booking a safe journey with Abbey Cars" className="absolute -top-16 left-1/2 z-10 h-[calc(100%+4rem)] w-auto max-w-none -translate-x-1/2 object-cover object-center sm:-top-20 sm:h-[calc(100%+5rem)]" />
+          <img src={typeof safetyImage === 'string' ? safetyImage : safetyImage.src} alt="Passenger booking a safe journey with Abbey Cars" className="absolute -top-12 left-1/2 z-10 h-[calc(100%+3rem)] w-auto max-w-none -translate-x-1/2 object-contain object-center sm:-top-16 sm:h-[calc(100%+4rem)]" />
         </div>
         <div className="flex flex-col justify-center px-6 py-10 sm:px-12 sm:py-14 lg:px-16">
           <p className="text-sm font-bold uppercase tracking-[0.22em] text-slate-950/70">A local service you can rely on</p>
@@ -98,16 +99,12 @@ export function HowToBook() {
             return (
               <div
                 key={title}
-                className="relative"
-                style={{
-                  height: 'calc(100vh + 1800px)',
-                  marginBottom: index < bookingSteps.length - 1 ? '-1840px' : 0,
-                }}
+                className={`relative lg:h-[calc(100vh+180px)] ${index < bookingSteps.length - 1 ? 'lg:mb-[-180px]' : ''}`}
               >
 
                 <article
                   className={`
-                    sticky
+                    lg:sticky
                     overflow-hidden
                     rounded-[28px]
                     border
@@ -250,6 +247,9 @@ export function HowToBook() {
 }
 
 export function HomeFinalCTA() {
+  const phoneNumber = getSiteSettings().contactInfo?.phone || '+44 118 945 4545'
+  const telHref = phoneNumber.replace(/\s+/g, '')
+
   return (
     <section className="relative isolate overflow-hidden bg-black py-16 text-white sm:py-24">
       <svg className="pointer-events-none absolute -left-24 top-1/2 hidden h-[150%] w-80 -translate-y-1/2 text-white/15 lg:block" viewBox="0 0 320 600" fill="none" aria-hidden="true">
@@ -262,9 +262,38 @@ export function HomeFinalCTA() {
         <h2 className="text-3xl font-bold sm:text-5xl">Ready to travel?</h2>
         <p className="mt-5 text-lg leading-8 text-slate-300">Book your taxi online and let Abbey Cars take care of your journey from start to finish.</p>
         <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
-          <a href="/test/booking" className="inline-flex items-center justify-center gap-2 rounded-full bg-yellow-400 px-7 py-3 font-semibold text-slate-950 transition hover:bg-yellow-300">Book Online</a>
-          <a href="tel:+441189798484" className="inline-flex items-center justify-center gap-2 rounded-full border border-yellow-400 px-7 py-3 font-semibold text-yellow-400 transition hover:bg-yellow-400/10"><FaPhoneAlt /> Call Us Now</a>
-          <a href="https://wa.me/441189798484" className="inline-flex items-center justify-center gap-2 rounded-full border border-white/30 px-7 py-3 font-semibold text-white transition hover:border-white">WhatsApp Us</a>
+          <a href="/booking" className="inline-flex items-center justify-center gap-2 rounded-full bg-yellow-400 px-7 py-3 font-semibold text-slate-950 transition hover:bg-yellow-300">Book Online</a>
+          <a href={`tel:${telHref}`} className="inline-flex items-center justify-center gap-2 rounded-full border border-yellow-400 px-7 py-3 font-semibold text-yellow-400 transition hover:bg-yellow-400/10"><FaPhoneAlt /> Call Us Now</a>
+        </div>
+      </div>
+    </section>
+  )
+}
+
+export function DownloadApp() {
+  return (
+    <section className="bg-white px-4 py-20 sm:px-6 sm:py-28 lg:px-8">
+      <div className="mx-auto grid max-w-7xl overflow-hidden rounded-[2rem] border border-slate-200 bg-yellow-400 shadow-[0_18px_50px_rgba(15,23,42,0.12)] lg:grid-cols-[1.15fr_0.85fr]">
+        <div className="relative flex flex-col justify-center overflow-hidden p-8 sm:p-12 lg:p-16">
+          <div className="absolute -bottom-20 -left-16 h-56 w-56 rounded-full border-[22px] border-black/10" />
+          <div className="relative">
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-black text-xl text-yellow-400"><FaMobileAlt /></div>
+            <p className="mt-8 text-xs font-bold uppercase tracking-[0.3em] text-slate-950/65">Available on Google Play</p>
+            <h2 className="mt-4 max-w-xl text-3xl font-semibold leading-[1.12] text-slate-950 sm:text-[2.65rem]">Download our app</h2>
+            <p className="mt-5 max-w-xl text-base leading-7 text-slate-950/75 sm:text-lg">Book your Abbey Cars journey wherever you are. Our mobile app makes booking your next trip even simpler.</p>
+            <a href="https://play.google.com/store/apps/details?id=com.abbeycars.passengerapp" target="_blank" rel="noreferrer" className="mt-8 inline-flex w-fit items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-bold text-slate-950 shadow-sm transition hover:bg-slate-100">Download on Google Play <FaArrowRight /></a>
+          </div>
+        </div>
+        <div className="flex items-center justify-center bg-black p-6 sm:p-10">
+          <div className="w-full max-w-md rounded-[1.5rem] border border-white/15 bg-white p-5 shadow-2xl sm:p-7">
+            <div className="flex items-end justify-between gap-4">
+              <div><p className="text-xs font-bold uppercase tracking-[0.25em] text-slate-500">Google Play</p><h3 className="mt-2 text-2xl font-semibold text-slate-950">Scan to download</h3></div>
+              <FaMobileAlt className="mb-1 text-2xl text-yellow-500" />
+            </div>
+            <div className="mt-6 flex justify-center">
+              <a href="https://play.google.com/store/apps/details?id=com.abbeycars.passengerapp" target="_blank" rel="noreferrer" className="rounded-2xl border border-slate-200 bg-slate-50 p-4 text-center transition hover:border-yellow-400"><img src="https://api.qrserver.com/v1/create-qr-code/?size=500x500&data=https%3A%2F%2Fplay.google.com%2Fstore%2Fapps%2Fdetails%3Fid%3Dcom.abbeycars.passengerapp" alt="Google Play QR code" className="mx-auto aspect-square w-full max-w-[190px] object-contain" /><p className="mt-3 text-[10px] font-bold uppercase tracking-[0.16em] text-slate-950">Google Play</p></a>
+            </div>
+          </div>
         </div>
       </div>
     </section>

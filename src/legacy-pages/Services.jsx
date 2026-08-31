@@ -13,6 +13,7 @@ import {
 } from 'react-icons/fa'
 import { GiPartyPopper } from 'react-icons/gi'
 import usePageTitle from '../hooks/usePageTitle'
+import { getSiteSettings } from '../lib/cms'
 
 const demoImages = {
   airport:
@@ -232,6 +233,8 @@ function ServiceCard({ service, iconMap }) {
 
 function Services() {
   usePageTitle('Services')
+  const contactInfo = getSiteSettings().contactInfo || {}
+  const telHref = (contactInfo.phone || '').replace(/\s+/g, '')
   const [activeCategory, setActiveCategory] = useState('All Services')
   const [visibleCount, setVisibleCount] = useState(8)
 
@@ -382,16 +385,10 @@ function Services() {
                 Book Online
               </NavLink>
               <a
-                href="tel:+441189798484"
+                href={`tel:${telHref}`}
                 className="inline-flex items-center justify-center rounded-full border border-[#facc15] px-8 py-3 text-base font-semibold text-[#facc15] transition hover:bg-[#facc15]/10"
               >
                 Call Us Now
-              </a>
-              <a
-                href="https://wa.me/441189798484"
-                className="inline-flex items-center justify-center rounded-full border border-white/30 px-8 py-3 text-base font-semibold text-white transition hover:border-white"
-              >
-                WhatsApp Us
               </a>
             </div>
           </div>

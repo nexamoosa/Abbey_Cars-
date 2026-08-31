@@ -2,12 +2,13 @@ import { useMemo, useState } from 'react'
 import { FaArrowRight, FaChevronDown, FaPhoneAlt } from 'react-icons/fa'
 import { NavLink, useSearchParams } from 'react-router-dom'
 import usePageTitle from '../hooks/usePageTitle'
+import { getSiteSettings } from '../lib/cms'
 
 const faqs = [
   {
     category: 'Booking',
     question: 'How do I book a taxi with Abbey Cars?',
-    answer: 'You can book online through our booking form, call our team, or contact us by WhatsApp. Add your pickup location, destination, date, time, passenger details and preferred vehicle so we can arrange your journey.',
+    answer: 'You can book online through our booking form or call our team directly. Add your pickup location, destination, date, time, passenger details and preferred vehicle so we can arrange your journey.',
   },
   {
     category: 'Booking',
@@ -55,6 +56,8 @@ function Faq() {
   usePageTitle('FAQ')
   const [searchParams] = useSearchParams()
   const query = searchParams.get('q') || ''
+  const phoneNumber = getSiteSettings().contactInfo?.phone || '+44 118 945 4545'
+  const phoneHref = phoneNumber.replace(/\s+/g, '')
   const [activeCategory, setActiveCategory] = useState('All')
   const [openIndex, setOpenIndex] = useState(0)
 
@@ -111,7 +114,7 @@ function Faq() {
           </div>
           <div className="flex flex-wrap gap-3">
             <NavLink to="/contact" className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-semibold text-black transition hover:bg-slate-100">Contact us <FaArrowRight /></NavLink>
-            <a href="tel:+441189798484" className="inline-flex items-center gap-2 rounded-full border border-slate-950 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-yellow-300"><FaPhoneAlt /> Call us</a>
+            <a href={`tel:${phoneHref}`} className="inline-flex items-center gap-2 rounded-full border border-slate-950 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-yellow-300"><FaPhoneAlt /> Call us</a>
           </div>
         </section>
       </div>

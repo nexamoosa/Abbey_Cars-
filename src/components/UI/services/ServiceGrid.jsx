@@ -1,12 +1,15 @@
 import { NavLink } from 'react-router-dom'
 import { FaPlaneDeparture, FaCarSide, FaBriefcase, FaMoon, FaCalendarCheck, FaArrowRight } from 'react-icons/fa'
+import local from '../../../assets/iamges/Local-Taxi-Journeys.jpg'
+import business from '../../../assets/iamges/Executive-&-Business-Travel-Executive-&-Business-Travel.jpg'
+import late from '../../../assets/iamges/Late-Night-Early-Morning-Rides.jpg'
 
 const demoImages = {
-  airport: 'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=900&q=80',
-  local: 'https://images.unsplash.com/photo-1489824904134-891ab64532f1?auto=format&fit=crop&w=900&q=80',
-  business: 'https://images.unsplash.com/photo-1551818255-e6e10975bc17?auto=format&fit=crop&w=900&q=80',
-  late: 'https://images.unsplash.com/photo-1525302220185-c387a117886e?auto=format&fit=crop&w=900&q=80',
-  regular: 'https://images.unsplash.com/photo-1551818255-e6e10975bc17?auto=format&fit=crop&w=900&q=80',
+  airport: 'https://images.unsplash.com/photo-1436491865332-7a61a109cc05?auto=format&fit=crop&w=900&q=80',
+  local,
+  business,
+  late,
+  regular: local,
 }
 
 const services = [

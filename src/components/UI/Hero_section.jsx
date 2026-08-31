@@ -1,7 +1,11 @@
 import heroImage from '../../assets/iamges/Home page image/HeroImage1.png'
 import { NavLink } from 'react-router-dom'
+import { getSiteSettings } from '../../lib/cms'
 
 function Hero_section() {
+  const phoneNumber = getSiteSettings().contactInfo?.phone || '+44 118 945 4545'
+  const telHref = phoneNumber.replace(/\s+/g, '')
+
   return (
     <section className="relative min-h-screen overflow-hidden">
       <img
@@ -27,8 +31,8 @@ function Hero_section() {
   `}
 </style>
 
-      <div className="relative flex min-h-[100vh] items-end justify-end p-6 sm:p-10 z-10">
-        <div className=" w-full max-w-lg rounded-[32px] border border-white/15 bg-white/90 p-8 shadow-2xl backdrop-blur-lg mb-17 sm:p-10">
+      <div className="relative flex min-h-[100vh] w-full min-w-0 items-end justify-end p-6 sm:p-10 z-10">
+        <div className="mb-17 w-full min-w-0 max-w-lg rounded-[32px] border border-white/15 bg-white/90 p-8 shadow-2xl backdrop-blur-lg sm:p-10">
           <p className="text-xs uppercase tracking-[0.35em] text-slate-500 ">Taxi in Reading you can trust</p>
           <h1 className="mt-4 text-3xl font-bold text-slate-950 sm:text-4xl">Taxi in Reading You Can Trust</h1>
           <p className="mt-4 text-sm leading-7 text-slate-600">
@@ -38,9 +42,9 @@ function Hero_section() {
             <NavLink to="/booking" className="inline-flex items-center justify-center rounded-2xl bg-[#fde507] px-6 py-3 text-sm font-semibold text-slate-950 transition hover:bg-yellow-400">
               Book Now
             </NavLink>
-            <NavLink to="tel:+441189798484" className="inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-900 transition hover:border-black">
+            <a href={`tel:${telHref}`} className="inline-flex items-center justify-center rounded-2xl border border-slate-200 bg-white px-6 py-3 text-sm font-semibold text-slate-900 transition hover:border-black">
               Call Us
-            </NavLink>
+            </a>
           </div>
         </div>
       </div>

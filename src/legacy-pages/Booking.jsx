@@ -288,7 +288,7 @@ function Booking() {
                 name="customer-email"
                 autoComplete="email"
                 type="email"
-                placeholder="you@example.com"
+                placeholder="Your email address"
                 value={form.email}
                 onChange={(e) => setForm((prev) => ({ ...prev, email: e.target.value }))}
                 className="mt-2 rounded-md border border-zinc-300 bg-white px-4 py-3 outline-none focus:border-black"
@@ -308,7 +308,7 @@ function Booking() {
             </button>
           </div>
 
-          <p className="text-xs leading-5 text-zinc-500">We only use your information to process and confirm your booking. Read our <a href="https://example.com/privacy" target="_blank" rel="noreferrer" className="font-semibold text-zinc-900 underline underline-offset-2">Privacy Policy</a>.</p>
+          <p className="text-xs leading-5 text-zinc-500">We only use your information to process and confirm your booking. Read our <a href="/about/privacy-policy" className="font-semibold text-zinc-900 underline underline-offset-2">Privacy Policy</a>.</p>
 
           {status ? (
             <div className={`rounded-2xl px-4 py-3 text-sm ${status.type === 'success' ? 'bg-emerald-50 text-emerald-700 border border-emerald-200' : 'bg-red-50 text-red-700 border border-red-200'}`}>

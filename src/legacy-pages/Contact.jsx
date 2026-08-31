@@ -4,11 +4,10 @@ import { getSiteSettings } from '../lib/cms'
 import usePageTitle from '../hooks/usePageTitle'
 
 const defaultContactInfo = {
-  phone: '+44 118 900 0000',
+  phone: '+44 118 945 4545',
   email: 'hello@abbeycars.com',
   address: '18 Station Road, Reading, Berkshire, RG1 1AA',
   officeHours: 'Mon-Sat: 08:00 - 20:00\nSun: 10:00 - 16:00',
-  whatsapp: '+44 7700 900123',
 }
 
 function Contact() {

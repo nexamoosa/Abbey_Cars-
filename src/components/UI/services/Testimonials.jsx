@@ -1,10 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { getTestimonials } from '../../../lib/cms'
+import { FaChevronLeft, FaChevronRight, FaQuoteLeft, FaUser } from 'react-icons/fa'
 
 function Testimonials() {
   const [testimonials, setTestimonials] = useState(() => getTestimonials())
   const [activeIndex, setActiveIndex] = useState(0)
   const [isPaused, setIsPaused] = useState(false)
+  const touchStartX = useRef(null)
 
   useEffect(() => {
     const refresh = () => {
@@ -31,7 +33,20 @@ function Testimonials() {
     setActiveIndex((index) => (index + direction + testimonials.length) % testimonials.length)
   }
 
-  const visibleTestimonials = Array.from({ length: Math.min(4, testimonials.length) }, (_, offset) => ({
+  const handleTouchStart = (event) => {
+    touchStartX.current = event.touches[0]?.clientX ?? null
+  }
+
+  const handleTouchEnd = (event) => {
+    if (touchStartX.current === null) return
+    const touchEndX = event.changedTouches[0]?.clientX ?? touchStartX.current
+    const distance = touchEndX - touchStartX.current
+    touchStartX.current = null
+    if (Math.abs(distance) < 45) return
+    move(distance < 0 ? 1 : -1)
+  }
+
+  const visibleTestimonials = Array.from({ length: Math.min(3, testimonials.length) }, (_, offset) => ({
     testimonial: testimonials[(activeIndex + offset) % testimonials.length],
     offset,
   }))
@@ -40,36 +55,38 @@ function Testimonials() {
     <section className="bg-white py-16 sm:py-24">
       <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="mb-12 text-center">
-          <h2 className="text-3xl font-bold text-slate-900 sm:text-4xl">What Our Customers Say</h2>
-          <p className="mt-4 max-w-2xl mx-auto text-lg text-slate-600">
+        <div className="mx-auto mb-12 max-w-3xl text-center">
+          <p className="text-xs font-bold uppercase tracking-[0.3em] text-yellow-600">What customers say</p>
+          <h2 className="mt-4 text-3xl font-semibold leading-[1.12] text-slate-950 sm:text-[2.65rem]">What Our Customers Say</h2>
+          <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-slate-600 sm:text-lg">
             Trusted by hundreds of satisfied customers across Berkshire and beyond.
           </p>
         </div>
 
         <div
-          className="relative mx-auto max-w-6xl px-8 sm:px-10"
+          className="relative mx-auto max-w-6xl px-0 sm:px-10"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+          onTouchCancel={() => { touchStartX.current = null }}
+          style={{ touchAction: 'pan-y' }}
         >
           {visibleTestimonials.length > 0 ? (
-            <div className="grid items-stretch gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="grid items-stretch gap-5 sm:grid-cols-2 lg:grid-cols-3">
               {visibleTestimonials.map(({ testimonial, offset }) => (
                 <article
                   key={`${testimonial.id}-${offset}`}
-                  className="flex min-h-[300px] flex-col rounded-2xl border border-slate-200 bg-slate-50 p-7 text-center shadow-sm transition-all duration-500 hover:border-yellow-400 hover:bg-yellow-50"
+                  className={`${offset === 0 ? 'flex' : 'hidden'} group min-h-[290px] flex-col rounded-2xl bg-slate-100 p-5 text-left transition-colors duration-300 hover:bg-yellow-50 sm:flex sm:p-6`}
                 >
-                  <div className="flex items-center justify-center gap-1">
-                    {[...Array(Number(testimonial.rating) || 0)].map((_, i) => (
-                      <svg key={i} className="h-5 w-5 fill-amber-400 text-amber-400" viewBox="0 0 20 20">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                      </svg>
-                    ))}
-                  </div>
-                  <p className="mt-4 text-sm leading-relaxed text-slate-700 italic">&quot;{testimonial.review}&quot;</p>
-                  <div className="mt-auto border-t border-slate-200 pt-5">
-                    <p className="font-semibold text-slate-900">{testimonial.name}</p>
-                    <p className="mt-1 text-xs text-slate-600">{testimonial.service}</p>
+                  <FaQuoteLeft className="text-3xl text-slate-300" aria-hidden="true" />
+                  <p className="mt-5 text-base font-medium leading-7 text-slate-900">{testimonial.review}</p>
+                  <div className="mt-auto -mb-10 flex w-fit items-center gap-2 rounded-full bg-white px-2.5 py-2 pr-4 shadow-sm">
+                    <span className="flex h-8 w-8 items-center justify-center rounded-full bg-yellow-400 text-xs text-slate-950" aria-hidden="true"><FaUser /></span>
+                    <div>
+                      <p className="text-xs font-semibold leading-4 text-slate-900">{testimonial.name}</p>
+                      <p className="text-[10px] leading-4 text-slate-500">{testimonial.service}</p>
+                    </div>
                   </div>
                 </article>
               ))}
@@ -84,17 +101,17 @@ function Testimonials() {
                 type="button"
                 onClick={() => move(-1)}
                 aria-label="Previous testimonial"
-                className="absolute left-2 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-slate-200 bg-white text-xl text-slate-700 shadow-sm transition hover:border-yellow-400 hover:bg-yellow-50 sm:-left-5"
+                className="absolute left-2 top-1/2 hidden h-9 w-9 -translate-y-1/2 items-center justify-center border border-slate-300 bg-white text-sm text-slate-700 transition hover:border-yellow-400 hover:bg-yellow-400 lg:flex sm:-left-5"
               >
-                ‹
+                <FaChevronLeft aria-hidden="true" />
               </button>
               <button
                 type="button"
                 onClick={() => move(1)}
                 aria-label="Next testimonial"
-                className="absolute right-2 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-slate-200 bg-white text-xl text-slate-700 shadow-sm transition hover:border-yellow-400 hover:bg-yellow-50 sm:-right-5"
+                className="absolute right-2 top-1/2 hidden h-9 w-9 -translate-y-1/2 items-center justify-center border border-slate-300 bg-white text-sm text-slate-700 transition hover:border-yellow-400 hover:bg-yellow-400 lg:flex sm:-right-5"
               >
-                ›
+                <FaChevronRight aria-hidden="true" />
               </button>
               <div className="mt-6 flex justify-center gap-2" aria-label="Testimonial slides">
                 {testimonials.map((item, index) => (

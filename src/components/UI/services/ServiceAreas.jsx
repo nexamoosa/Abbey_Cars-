@@ -21,39 +21,39 @@ function ServiceAreas() {
   }
 
   return (
-    <section className="bg-white py-16 sm:py-24">
+    <section className="bg-white py-20 sm:py-28">
       <div className="mx-auto max-w-[1440px] px-4 sm:px-6 lg:px-8">
         <div className="grid items-start gap-10 lg:grid-cols-[minmax(280px,0.75fr)_minmax(0,1.25fr)] lg:gap-16">
           <div className="lg:sticky lg:top-24 lg:z-10">
-            {/* Section Header */}
-            <div className="relative border-l-4 border-yellow-400 pl-6 sm:pl-7">
-              <div className="mb-4 flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-yellow-600">
-                <FaMapMarkerAlt className="text-base" />
+            <div className="max-w-md">
+              <div className="mb-6 flex items-center gap-3 text-xs font-bold uppercase tracking-[0.2em] text-slate-500">
+                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-yellow-400 text-slate-950">
+                  <FaMapMarkerAlt className="text-sm" aria-hidden="true" />
+                </span>
                 <span>Local coverage</span>
               </div>
-              <h2 className="max-w-xl text-3xl font-bold leading-[1.08] text-slate-950 sm:text-4xl">
+              <h2 className="max-w-xl text-3xl font-semibold leading-[1.12] text-slate-950 sm:text-[2.65rem]">
                   Proudly Serving Reading & Surrounding Areas
               </h2>
-              <p className="mt-5 max-w-lg text-base leading-7 text-slate-600">
+              <p className="mt-6 max-w-lg text-base leading-7 text-slate-600">
                 From short trips around town to airport transfers and longer journeys, our drivers cover Reading, Wokingham, Newbury, Bracknell, Henley and the surrounding areas.
               </p>
             </div>
 
-            {/* Coverage Stats */}
-            <div className="mt-8 border-y border-slate-200 py-5">
-              <p className="mb-4 text-xs font-bold uppercase tracking-[0.18em] text-slate-500">Our coverage at a glance</p>
-              <div className="grid grid-cols-3 divide-x divide-slate-200">
-                <div className="px-2 text-center first:pl-0 last:pr-0">
-                  <div className="text-2xl font-bold text-yellow-600">{postcodeAreas.length}</div>
-                  <p className="mt-1 text-xs font-semibold leading-4 text-slate-600">Main Regions</p>
+            <div className="mt-10 border-t border-slate-200 pt-5">
+              <p className="mb-5 text-xs font-bold uppercase tracking-[0.18em] text-slate-500">Our coverage at a glance</p>
+              <div className="grid grid-cols-3 gap-4">
+                <div>
+                  <div className="text-3xl font-semibold leading-none text-slate-950">{postcodeAreas.length}</div>
+                  <p className="mt-2 text-xs font-medium leading-4 text-slate-500">Main Regions</p>
                 </div>
-                <div className="px-2 text-center first:pl-0 last:pr-0">
-                  <div className="text-2xl font-bold text-yellow-600">100+</div>
-                  <p className="mt-1 text-xs font-semibold leading-4 text-slate-600">Towns & Villages</p>
+                <div>
+                  <div className="text-3xl font-semibold leading-none text-slate-950">100<span className="text-yellow-600">+</span></div>
+                  <p className="mt-2 text-xs font-medium leading-4 text-slate-500">Towns & Villages</p>
                 </div>
-                <div className="px-2 text-center first:pl-0 last:pr-0">
-                  <div className="text-2xl font-bold text-yellow-600">24/7</div>
-                  <p className="mt-1 text-xs font-semibold leading-4 text-slate-600">Always Ready</p>
+                <div>
+                  <div className="text-3xl font-semibold leading-none text-slate-950">24<span className="text-yellow-600">/7</span></div>
+                  <p className="mt-2 text-xs font-medium leading-4 text-slate-500">Always Ready</p>
                 </div>
               </div>
             </div>
@@ -65,17 +65,15 @@ function ServiceAreas() {
             {postcodeAreas.map((item) => (
               <div
                 key={item.code}
-                className="group overflow-hidden rounded-3xl border border-slate-200 bg-white p-3 shadow-[0_8px_30px_rgba(15,23,42,0.06)] transition-all duration-300 hover:-translate-y-0.5 hover:border-yellow-400 hover:shadow-[0_16px_36px_rgba(15,23,42,0.12)]"
+                className="group overflow-hidden rounded-3xl border border-slate-200 bg-slate-50 p-6 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:border-yellow-400 hover:bg-white hover:shadow-lg"
               >
-                <div className="rounded-2xl bg-gradient-to-br from-slate-50 to-white p-5 sm:p-6">
-                  <div className="grid gap-5 sm:grid-cols-[minmax(210px,0.7fr)_minmax(0,1.3fr)] sm:items-center sm:gap-8">
-                    <div className="px-1 py-2">
-                      <span className="block text-lg font-bold leading-snug text-slate-950">{item.code}</span>
-                    </div>
-                    <p className="text-[0.95rem] leading-7 text-slate-600">{item.areas}</p>
+                <div className="grid gap-5 sm:grid-cols-[minmax(210px,0.7fr)_minmax(0,1.3fr)] sm:items-center sm:gap-8">
+                  <div className="px-1 py-2">
+                    <span className="block text-lg font-bold leading-snug text-slate-950">{item.code}</span>
                   </div>
+                  <p className="text-[0.95rem] leading-7 text-slate-600">{item.areas}</p>
                 </div>
-                <div className="mt-3 overflow-hidden rounded-2xl border border-slate-200 bg-slate-100">
+                <div className="mt-5 overflow-hidden rounded-2xl border border-slate-200 bg-slate-100">
                   <iframe
                     title={`${item.code} location map`}
                     src={`https://www.google.com/maps?q=${encodeURIComponent(`${item.code}, UK`)}&output=embed`}
@@ -123,7 +121,7 @@ function ServiceAreas() {
               Share your pickup and destination, and we will confirm availability for your journey.
             </p>
           </div>
-          <NavLink to="/contact" className="inline-flex shrink-0 items-center justify-center gap-2 self-start rounded-full bg-yellow-400 px-6 py-3 font-semibold text-slate-900 transition-colors hover:bg-yellow-500 md:self-auto">
+          <NavLink to="/contact" className="inline-flex shrink-0 items-center justify-center gap-2 self-start rounded-[20px] bg-yellow-400 px-6 py-3 font-semibold text-slate-900 transition-colors hover:bg-yellow-500 md:self-auto">
             Check availability <FaArrowRight className="text-sm" />
           </NavLink>
         </div>

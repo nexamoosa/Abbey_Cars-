@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 import { FiHome, FiBookOpen, FiMail, FiPhone, FiChevronDown, FiChevronLeft, FiChevronRight, FiMenu, FiX, FiUsers, FiBriefcase, FiSuitcase } from './Icons'
 import { MdDirectionsCar, MdLocationOn, MdAirlineSeatIndividual, MdInfo } from './Icons'
-import { getAreas } from '../lib/cms'
+import { getAreas, getSiteSettings } from '../lib/cms'
 import { getApiBase, getFleet } from '../lib/api'
 import logoImage from '../assets/iamges/logo-01.png'
 import journeyImage from '../assets/iamges/Home page image/HeroImage1.png'
@@ -10,7 +10,7 @@ import safetyImage from '../assets/iamges/Home page image/Safety is non-negotiab
 import routeImage from '../assets/iamges/Set your route.png'
 
 const navItems = []
-const aboutImages = [journeyImage, safetyImage, routeImage]
+const aboutImages = [journeyImage, safetyImage, routeImage, journeyImage]
 
 const dropdowns = [
   {
@@ -79,6 +79,7 @@ const dropdowns = [
       { to: '/about/our-story', label: 'Our Story' },
       { to: '/about/reviews-testimonials', label: 'Reviews & Testimonials' },
       { to: '/faq', label: 'FAQ' },
+      { to: '/about/privacy-policy', label: 'Privacy Policy' },
     ],
   },
 ]
@@ -86,6 +87,8 @@ const dropdowns = [
 function Header() {
   const { pathname } = useLocation()
   const isHome = pathname === '/' || pathname === '/home'
+  const primaryPhone = getSiteSettings().contactInfo?.phone || '+44 118 945 4545'
+  const primaryPhoneHref = primaryPhone.replace(/\s+/g, '')
   const [showMenu, setShowMenu] = useState(false)
   const [areas, setAreas] = useState(() => getAreas().filter((a) => a.enabled !== false))
   const [fleetItems, setFleetItems] = useState([])
@@ -412,7 +415,7 @@ function Header() {
             </NavLink>
             <div style={dropdownPanelStyle} className="dropdown-shell dropdown-full-width absolute top-full opacity-0 invisible -translate-y-2 transition-all duration-200 ease-out group-hover:opacity-100 group-hover:visible group-hover:translate-y-0">
               <div className="mx-auto max-w-7xl px-4 py-5 sm:px-6 lg:px-8">
-                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
                   {dropdowns[3].items.map((item, index) => (
                     <NavLink key={item.to || item.slug || item.label} to={item.to} className="dropdown-card group overflow-hidden rounded-xl text-sm">
                       <div className="relative aspect-[2.4/1] overflow-hidden bg-yellow-400">
@@ -458,7 +461,7 @@ function Header() {
         <div className="flex items-center gap-3">
           <div className="hidden items-center gap-3 lg:flex">
             <a
-              href="tel:+441234567890"
+              href={`tel:${primaryPhoneHref}`}
               aria-label="Call Abbey Cars"
               className="inline-flex h-10 w-10 items-center justify-center rounded-full transition"
               style={{

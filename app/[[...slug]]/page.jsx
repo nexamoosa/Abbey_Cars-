@@ -9,6 +9,10 @@ const pageMetadata = {
     title: 'About Abbey Cars',
     description: 'Learn about Abbey Cars and our trusted local taxi service in Reading and Berkshire.',
   },
+  'about/privacy-policy': {
+    title: 'Privacy Policy | Abbey Cars',
+    description: 'Read how Abbey Cars collects, uses and protects information submitted through our booking and contact forms.',
+  },
   'about/our-story': {
     title: 'Our Story | Local Taxi Service in Reading',
     description: 'Discover the Abbey Cars story and our commitment to reliable local taxis, airport transfers and personal service across Reading and Berkshire.',

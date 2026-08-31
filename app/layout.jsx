@@ -1,8 +1,10 @@
 import '../src/index.css'
 import '../src/App.css'
+import logoImage from '../src/assets/iamges/logo-01.png'
 
 export const metadata = {
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
+  icons: { icon: logoImage.src },
   title: {
     default: 'Abbey Cars | Taxi Service in Reading',
     template: '%s | Abbey Cars',
@@ -48,13 +50,13 @@ export default function RootLayout({ children }) {
     name: 'Abbey Cars',
     description: 'Reliable taxi service in Reading, airport transfers and comfortable journeys across Berkshire.',
     url: process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000',
-    telephone: '+441189798484',
+    telephone: '+441189454545',
     areaServed: ['Reading', 'Wokingham', 'Bracknell', 'Berkshire'],
   }
 
   return (
     <html lang="en">
-      <body>
+      <body suppressHydrationWarning>
         {children}
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(businessSchema) }} />
       </body>

@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { FaFacebookF, FaInstagram, FaLinkedinIn, FaYoutube, FaXTwitter, FaTiktok, FaGlobe } from 'react-icons/fa6'
 import usePageTitle from '../hooks/usePageTitle'
 import {
   FiBookOpen,
@@ -622,6 +623,17 @@ function Admin() {
     const [label, setLabel] = useState('')
     const [url, setUrl] = useState('')
 
+    const getSocialIcon = (link) => {
+      const haystack = `${link?.label || ''} ${link?.url || ''}`.toLowerCase()
+      if (haystack.includes('facebook')) return FaFacebookF
+      if (haystack.includes('instagram')) return FaInstagram
+      if (haystack.includes('linkedin')) return FaLinkedinIn
+      if (haystack.includes('youtube') || haystack.includes('youtu.be')) return FaYoutube
+      if (haystack.includes('x.com') || haystack.includes('twitter')) return FaXTwitter
+      if (haystack.includes('tiktok')) return FaTiktok
+      return FaGlobe
+    }
+
     const refresh = () => setLinks(getSocialLinks())
 
     const add = () => {
@@ -642,16 +654,25 @@ function Admin() {
     return (
       <div className="mt-6 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-zinc-200">
         <h3 className="text-lg font-bold">Social Links</h3>
-        <p className="text-sm text-zinc-500">Manage social links shown site-wide (footer/header).</p>
+        <p className="text-sm text-zinc-500">Links auto-detect their platform icon (Facebook, Instagram, LinkedIn, etc.).</p>
         <div className="mt-4 space-y-2">
-          {links.map((l, i) => (
-            <div key={i} className="flex items-center justify-between">
-              <div>{l.label} — <a href={l.url} className="text-yellow-600">{l.url}</a></div>
-              <div>
+          {links.map((l, i) => {
+            const Icon = getSocialIcon(l)
+            return (
+              <div key={i} className="flex items-center justify-between gap-3 rounded-xl border border-zinc-200 px-3 py-2">
+                <div className="flex items-center gap-3">
+                  <span className="flex h-9 w-9 items-center justify-center rounded-full bg-yellow-100 text-yellow-700">
+                    <Icon className="h-4 w-4" />
+                  </span>
+                  <div>
+                    <div className="font-medium text-zinc-900">{l.label}</div>
+                    <a href={l.url} className="text-sm text-yellow-600">{l.url}</a>
+                  </div>
+                </div>
                 <button onClick={() => remove(i)} className="rounded-xl bg-red-500 px-3 py-1 text-white">Delete</button>
               </div>
-            </div>
-          ))}
+            )
+          })}
         </div>
 
         <div className="mt-4 flex gap-2 flex-col sm:flex-row">
@@ -2368,7 +2389,7 @@ function Admin() {
           <div className="mt-4 space-y-3">
             <label className="block text-sm font-medium text-zinc-700">
               Image URL
-              <input value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} placeholder="https://example.com/image.jpg" className="mt-2 w-full rounded-2xl border border-zinc-300 bg-white px-4 py-3 outline-none" />
+              <input value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} placeholder="Paste an image URL" className="mt-2 w-full rounded-2xl border border-zinc-300 bg-white px-4 py-3 outline-none" />
             </label>
             <label className="block text-sm font-medium text-zinc-700">
               Image size
@@ -2552,8 +2573,10 @@ function Admin() {
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-zinc-500">Service area</p>
               <h3 className="mt-1 text-2xl font-bold text-zinc-900">{isCreateMode ? 'Create Area' : 'Edit Area'}</h3>
+              <p className="mt-2 max-w-xl text-sm leading-6 text-zinc-500">Build your public area page from the fields below. The title and excerpt appear in the hero, while the page content controls the sections underneath.</p>
             </div>
             <div className="flex flex-wrap items-center gap-2" onMouseDown={saveEditorSelection}>
+              {!isCreateMode && (editorPage.to || editorPage.slug) ? <button type="button" onClick={() => window.open(editorPage.to || `/areas-we-cover/${editorPage.slug}`, '_blank', 'noopener,noreferrer')} className="rounded-xl border border-zinc-300 bg-white px-4 py-2 text-sm font-medium text-zinc-700 transition hover:border-zinc-500 hover:bg-zinc-50">Preview live page</button> : null}
               <button onClick={() => navigate('/admin/areas')} className="rounded-xl border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-700 transition hover:bg-zinc-50">Cancel</button>
               <button onClick={saveContent} className="rounded-xl bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-emerald-500">{isCreateMode ? 'Create Area' : 'Save Area'}</button>
             </div>
@@ -2564,7 +2587,7 @@ function Admin() {
               <section className="rounded-2xl border border-zinc-200 bg-zinc-50 p-4 sm:p-5">
                 <label className="block text-sm font-medium text-zinc-700">
                   <span className="flex items-center gap-2">
-                    Area Name <span className="text-rose-500">*</span>
+                    Public Page Title <span className="text-rose-500">*</span>
                   </span>
                   <input
                     value={metaTitle}
@@ -2572,7 +2595,25 @@ function Admin() {
                     placeholder="e.g. Reading Airport Transfers"
                     className="mt-2 w-full rounded-xl border border-zinc-300 bg-white px-4 py-3 text-base text-zinc-900 outline-none transition focus:border-zinc-500"
                   />
+                  <span className="mt-2 block text-xs leading-5 text-zinc-500">This becomes the main heading at the top of the public page and the page title shown in Admin.</span>
                 </label>
+              </section>
+
+              <section className="rounded-2xl border border-zinc-200 bg-zinc-50 p-4 sm:p-5">
+                <label className="block text-sm font-medium text-zinc-700">
+                  Hero Introduction
+                  <textarea value={excerpt} onChange={(e) => setExcerpt(e.target.value)} placeholder="Write the short introduction shown below the hero heading." className="mt-2 min-h-24 w-full rounded-xl border border-zinc-300 bg-white px-4 py-3 text-base text-zinc-900 outline-none transition focus:border-zinc-500" />
+                  <span className="mt-2 block text-xs leading-5 text-zinc-500">Keep this short. It appears directly below the title on the public page.</span>
+                </label>
+              </section>
+
+              <section className="rounded-2xl border border-amber-200 bg-amber-50 p-4 sm:p-5">
+                <p className="text-sm font-semibold text-zinc-900">Quick guide</p>
+                <div className="mt-3 grid gap-3 text-xs leading-5 text-zinc-600 sm:grid-cols-3">
+                  <p><strong className="text-zinc-900">Title:</strong> public hero heading</p>
+                  <p><strong className="text-zinc-900">Excerpt:</strong> hero introduction</p>
+                  <p><strong className="text-zinc-900">Content:</strong> all page sections</p>
+                </div>
               </section>
 
               <section className="rounded-2xl border border-zinc-200 bg-zinc-50 p-4 sm:p-5">
@@ -2593,14 +2634,16 @@ function Admin() {
               <section className="rounded-2xl border border-zinc-200 bg-zinc-50 p-4 sm:p-5">
                 <label className="block text-sm font-medium text-zinc-700">
                   <span className="flex items-center gap-2">
-                    About this location <span className="text-rose-500">*</span>
+                    Page Content <span className="text-rose-500">*</span>
                   </span>
                 </label>
+                <p className="mt-2 text-xs leading-5 text-zinc-500">Use H2 for main sections, H3 for subsections, and lists for services, areas, or booking steps. The public template styles them automatically.</p>
                 <div className="mt-3 flex flex-wrap items-center gap-2" onMouseDown={saveEditorSelection}>
                   <button type="button" onClick={() => applyCommand('bold')} className="rounded-xl bg-white px-3 py-2 text-sm">Bold</button>
                   <button type="button" onClick={() => applyCommand('italic')} className="rounded-xl bg-white px-3 py-2 text-sm">Italic</button>
                   <button type="button" onClick={() => applyCommand('underline')} className="rounded-xl bg-white px-3 py-2 text-sm">Underline</button>
                   <button type="button" onClick={() => applyCommand('formatBlock', '<H2>')} className="rounded-xl bg-white px-3 py-2 text-sm">H2</button>
+                  <button type="button" onClick={() => applyCommand('formatBlock', '<H3>')} className="rounded-xl bg-white px-3 py-2 text-sm">H3</button>
                   <button type="button" onClick={() => applyCommand('insertUnorderedList')} className="rounded-xl bg-white px-3 py-2 text-sm">Bullet</button>
                   <button type="button" onClick={openLinkDialog} className="rounded-xl bg-white px-3 py-2 text-sm">Add link</button>
                   <button type="button" onClick={openImageDialog} className="rounded-xl bg-white px-3 py-2 text-sm">Add image</button>
@@ -2663,7 +2706,7 @@ function Admin() {
                   <input
                     value={featuredImage}
                     onChange={(e) => setFeaturedImage(e.target.value)}
-                    placeholder="https://example.com/hero.jpg"
+                    placeholder="Paste a hero image URL"
                     className="w-full rounded-xl border border-zinc-300 bg-white px-4 py-3 text-sm text-zinc-900 outline-none transition focus:border-zinc-500"
                   />
                   <label className="inline-flex cursor-pointer items-center justify-center rounded-xl bg-zinc-900 px-3 py-2 text-xs font-semibold uppercase tracking-[0.08em] text-white transition hover:bg-zinc-700">
@@ -3419,11 +3462,10 @@ function Admin() {
 
   function ContactInfoManager() {
     const defaults = {
-      phone: '+44 118 900 0000',
+      phone: '+44 118 945 4545',
       email: 'hello@abbeycars.com',
       address: '18 Station Road, Reading, Berkshire, RG1 1AA',
       officeHours: 'Mon-Sat: 08:00 - 20:00\nSun: 10:00 - 16:00',
-      whatsapp: '+44 7700 900123',
     }
     const [formData, setFormData] = useState(defaults)
     const [notice, setNotice] = useState('')
@@ -3449,11 +3491,6 @@ function Admin() {
           <label className="flex flex-col text-sm font-medium text-zinc-700">
             Phone Number
             <input value={formData.phone} onChange={(e) => setFormData((v) => ({ ...v, phone: e.target.value }))} className="mt-2 rounded-xl border border-zinc-300 bg-white px-3 py-2.5 outline-none focus:border-black" />
-          </label>
-
-          <label className="flex flex-col text-sm font-medium text-zinc-700">
-            WhatsApp Number
-            <input value={formData.whatsapp} onChange={(e) => setFormData((v) => ({ ...v, whatsapp: e.target.value }))} className="mt-2 rounded-xl border border-zinc-300 bg-white px-3 py-2.5 outline-none focus:border-black" />
           </label>
 
           <label className="flex flex-col text-sm font-medium text-zinc-700 md:col-span-2">
@@ -4187,7 +4224,7 @@ function Admin() {
             </div>
           ) : activeSection === 'blogs' ? (
             <div className="mt-6 rounded-2xl bg-white p-6 shadow-sm ring-1 ring-zinc-200">
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between gap-3">
                 <h3 className="text-lg font-bold">Blogs</h3>
                 <AddCmsPage type="blogs" onCreate={() => setCmsRefresh((v) => v + 1)} />
               </div>
@@ -4209,12 +4246,11 @@ function Admin() {
                       )}
                     </div>
                     <div className="flex gap-2">
-                      <button onClick={() => navigate(`/admin/blogs/edit/${p.slug}`)} className="rounded-xl bg-yellow-400 px-2 py-1 text-black">Edit Content</button>
+                      <button type="button" onClick={() => navigate(`/admin/blogs/edit/${p.slug}`)} aria-label={`Edit ${p.title}`} title="Edit blog content" className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-yellow-400 text-black transition hover:bg-yellow-500">
+                        <FiEdit3 size={16} aria-hidden="true" />
+                      </button>
                       <button onClick={() => { updateBlogPost(p.slug, { enabled: p.enabled === false ? true : false }); setCmsRefresh((v) => v + 1); try { window.dispatchEvent(new Event('storage')) } catch {} }} className={`rounded-xl px-2 py-1 ${p.enabled === false ? 'bg-yellow-400' : 'bg-zinc-100'}`}>{p.enabled === false ? 'Enable' : 'Disable'}</button>
                       <button onClick={() => { if (confirm('Delete this post?')) { removeBlogPost(p.slug); setCmsRefresh((v) => v + 1); try { window.dispatchEvent(new Event('storage')) } catch {} } }} className="rounded-xl bg-red-500 px-2 py-1 text-white">Delete</button>
-                      {editing === `blog-${p.slug}` ? null : (
-                        <button onClick={() => { setEditing(`blog-${p.slug}`); setEditTitle(p.title); setEditSlug(p.slug) }} className="rounded-xl bg-zinc-100 px-2 py-1">Edit</button>
-                      )}
                     </div>
                   </div>
                 ))}
