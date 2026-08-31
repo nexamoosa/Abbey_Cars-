@@ -10,11 +10,11 @@ const pageMetadata = {
     description: 'Learn about Abbey Cars and our trusted local taxi service in Reading and Berkshire.',
   },
   'about/privacy-policy': {
-    title: 'Privacy Policy | Abbey Cars',
+    title: 'Privacy Policy',
     description: 'Read how Abbey Cars collects, uses and protects information submitted through our booking and contact forms.',
   },
   'about/our-story': {
-    title: 'Our Story | Local Taxi Service in Reading',
+    title: 'Our Story',
     description: 'Discover the Abbey Cars story and our commitment to reliable local taxis, airport transfers and personal service across Reading and Berkshire.',
     keywords: ['Abbey Cars', 'local taxi service Reading', 'Reading taxi company', 'airport transfers Berkshire', 'executive travel Reading'],
   },
@@ -65,14 +65,14 @@ export async function generateMetadata({ params }) {
     robots: { index: true, follow: true },
     alternates: { canonical },
     openGraph: {
-      title: `${metadata.title} | Abbey Cars`,
+      title: metadata.title,
       description: metadata.description,
       url: canonical,
       type: 'website',
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${metadata.title} | Abbey Cars`,
+      title: metadata.title,
       description: metadata.description,
     },
   }
